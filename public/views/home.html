@@ -1,0 +1,48 @@
+<!-- <form class="form-horizontal">
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Full name</label>
+    <p class="form-control-static">{{  vm }}</p>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Email</label>
+    <p class="form-control-static">{{ vm.user.data.email }}</p>
+    <button ng-click="vm.onLogout()">logout</button>
+  </div>
+</form> -->
+<div class="header">
+    <div class="navbar navbar-default" style="background: white" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#js-navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" style="font-family: 'Overpass Mono', monospace;" ui-sref-active="homelanding" ui-sref="homelanding">
+                Event logger &#60/></a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="js-navbar-collapse">
+				<!-- Regular user options -->
+				<ul class="nav navbar-nav" ui-sref-active="current" ui-sref="somepage">
+                    <li><a >About</a></li>
+                </ul>
+                <!-- Admin options -->
+                <div class="col-md-1 pull-right" style="margin-top: 7px">
+                	<button class="btn btn-default" ng-click="vm.onLogout()">logout</button>
+                </div>
+                <ul class="nav navbar-nav pull-right">
+                    <li><a>{{ vm.user.first_name }} {{ vm.user.last_name }}</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="container" style="margin:auto auto">
+    <div ui-view="profileView"></div>
+</div>

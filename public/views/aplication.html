@@ -1,0 +1,124 @@
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="m-b-lg">
+            <div class="m-t-md" align="center">
+                <strong><h1>{{vm.application.app_name}}</h1></strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>Your event list</h5>
+        <div class="ibox-tools">
+            <!--<a href="" class="btn btn-primary btn-xs">Add new issue</a>-->
+        </div>
+    </div>
+    <div class="ibox-content">
+        <div class="m-b-lg">
+            <div class="m-t-md">
+                <strong>Found {{eventList.length}} events.</strong>
+
+                <button style="float:right;margin-left:6px;" class="btn btn-success" ng-click="vm.openEventModal(vm.application)">Add event</button>
+
+                <button style="float:right;margin-right:6px;" class="btn btn-default" ng-click="vm.openListUserModal(vm.application._id)">Show users</button>
+
+            </div>
+        </div>
+        <div ng-if="vm.eventList.length!==0">
+            <div ng-if="vm.application.version">
+                <b>App  versions:  </b> <select ng-model="vm.appVersions" ng-init="vm.appVersions = undefined" ng-change="vm.getVersionList(vm.appVersions)" >
+                        <option value="">All</option>
+                        <option ng-repeat="ob in eventList | unique:'app_version'" ng-value="ob.app_version" >{{ob.app_version}}</option>
+                    </select>
+                </br>
+            </div>
+        </br>
+
+          <b>Show events:</b> <select ng-model="vm.filterEvents" ng-init="vm.filterEvents=undefined">
+                    <option value="">All</option>
+                    <option ng-repeat="ob in eventList | unique:'fragment'" ng-value="ob.fragment" >{{ob.fragment}} (
+    In total {{vm.getCount(ob.fragment)}})</option>
+                </select> <b>fragments.</b>
+
+
+            </br>
+        </br>
+            <div class="table-responsive">
+                <table class="table table-hover issue-tracker">
+
+                    <thead>
+                        <tr>
+                            <th>Event type</th>
+                            <th data-hide="phone">Version</th>
+                            <th data-hide="phone">Fragment</th>
+                          <!--   <th data-hide="phone">Data</th>
+                            <th data-hide="phone">Stack</th> -->
+                            <th data-hide="phone" >Updated at</th>
+                            <th class="text-right">Created at</th>
+                        </tr>
+                    </thead>
+                    <tbody>  <!-- { fragment: 'line 100' }:true -->
+            
+
+                    <tr ng-if="vm.application.version"  ng-repeat="ob in eventList |  filter:vm.filterEvents | filter: {app_version: vm.appVersions} ">
+                        <td class="issue-info">
+                            <a ui-sref="eventPage({appId: vm.application._id, eventId: ob._id})">
+                                {{ob.event_type}}
+                            </a>
+                        </td>
+
+                        <td>{{ob.app_version}}</td>
+                        <td>
+    						{{ob.fragment}}
+                        </td>
+
+                      <!--   <td>
+                        	{{ob.data}}
+                        </td>
+                        <td>
+                            {{ob.stack}}
+                        </td> -->
+                        <td>
+                            {{ob.updatedAt | date}}
+                        </td>
+                        <td class="text-right">
+                            {{ob.createdAt | date}}
+                        </td>
+                    </tr>
+                    <tr ng-if="!vm.application.version" ng-repeat="ob in eventList | filter:vm.filterEvents">
+                        <td class="issue-info">
+                            <a ui-sref="eventPage({appId: vm.application._id, eventId: ob._id})">
+                                {{ob.event_type}}
+                            </a>
+                        </td>
+                        <td>{{ob.app_version}}</td>
+                        <td>
+                            {{ob.fragment}}
+                        </td>
+
+                       <!--  <td>
+                            {{ob.data}}
+                        </td>
+                        <td>
+                            {{ob.stack}}
+                        </td> -->
+                        <td>
+                            {{ob.updatedAt | date}}
+                        </td>
+                        <td class="text-right">
+                            {{ob.createdAt | date}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div ng-show="eventList.length === 0" style="text-align: center; padding: 50px" ng-cloak>
+                                No events found...
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

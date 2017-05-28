@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h3 class="modal-title">Registered users on this application</h3>
+</div>
+<div class="modal-body">
+
+            <div ng-if="vm.listUsers.length==0">No active users.</div>
+
+            <div class="table-responsive" ng-if="vm.listUsers.length!==0">
+            <table class="table table-hover issue-tracker">
+
+                <thead>
+                    <tr>
+                        
+                        <th data-hide="phone">First name</th>
+                        <th data-hide="phone">Last name</th>
+                        <th data-hide="phone">Email</th>
+                    </tr>
+                </thead>
+                <tbody>  <!-- { fragment: 'line 100' }:true -->
+                <tr ng-repeat="u in vm.listUsers">
+                  
+                    <td>
+                    {{u.first_name}}
+                    </td>
+
+                    <td>
+                      {{u.last_name}}
+                    </td>
+                    <td>
+                        {{u.email}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default btn-sm" type="button" ng-click="vm.cancel()">Hide</button>
+</div>

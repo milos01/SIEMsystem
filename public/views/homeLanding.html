@@ -1,0 +1,154 @@
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <h5>Applications </h5>
+        <button class="btn btn-info btn-xs pull-right" style="margin-top: -3px" ng-click="vm.openReportModal()">Add</button>        
+    </div>
+    <div class="ibox-content">
+         <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content" style="border: none">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th>App ID</th>
+                                    <th data-hide="phone">App name</th>
+                                    <th data-hide="phone"></th>
+                                    <th data-hide="phone">DNS</th>
+                                    <th data-hide="phone,tablet" >Add user</th>
+                                    <th data-hide="phone">#</th>
+                                    <th class="text-right">Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody> 
+                                <tr ng-repeat="app in applications">
+                                    <td style="padding-top: 15px">
+                                       {{$index}}
+                                       
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{app.app_name}}
+                                    </td>
+                                    <td >
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{app.dns}}
+                                    </td>
+                                    <td>
+                                    	<form name="vm.test" ng-controller="testCtrl"> 
+                                    	<div class="form-group" ng-class="{ 'has-error' : newUserForm.newuser.$error.acceptUser && !newUserForm.newuser.$pristine}" ng-form="newUserForm">
+	                                        <input type="text" name="newuser" class="form-control" ng-model="newuser.app_name" ng-change="checkNewUser(app)" required>
+	                                        <button class="btn btn-default btn-xs pull-right" type="submit" style="margin-top: -28px; margin-right: 5px" ng-click="addNewUser(app._id, app)">Add</button>
+	                                     </div>
+	                                     </form>
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                    	{{app.users.length}} <i class="fa fa-user" aria-hidden="true"></i> 
+                                    </td>
+                                    <td class="text-right" style="padding-top: 15px">
+                                        <div class="btn-group">
+                                            <button class="btn-white btn btn-xs" ui-sref="applicationProf({appId: app._id})">View</button>
+                                            <button class="btn-danger btn btn-xs" ng-click="vm.deleteApp(app._id)">Delete</button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <div ng-show="applications.length === 1" ng-cloak>
+                                	<b>{{applications.length}}</b> app found
+                                </div>
+                                <div ng-show="applications.length != 1" ng-cloak>
+                                	<b>{{applications.length}}</b> apps found
+                                </div>
+                         		<!-- <tr ng-show="applications.length === 0" ng-cloak>
+                         			No apps found...
+                         		</tr> -->
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+
+                            </table>
+ 							<div ng-show="applications.length === 0" style="text-align: center" ng-cloak>
+                                No apps found...
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="ibox-content" style="border: none">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th>App ID</th>
+                                    <th data-hide="phone">App name</th>
+                                    <th data-hide="phone"></th>
+                                    <th data-hide="phone">DNS</th>
+                                    <th data-hide="phone,tablet" >Description</th>
+                                    <th data-hide="phone"></th>
+                                    <th class="text-right"></th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="app in assigned_applications">
+                                    <td style="padding-top: 15px">
+                                       {{$index}}
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{app.app_name}}
+                                    </td>
+                                    <td >
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{app.dns}}
+                                    </td>
+                                    <td>
+                                    	{{app.description}}
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td class="text-right" style="padding-top: 15px">
+                                        <div class="btn-group">
+                                            <button class="btn-white btn btn-xs">View</button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <div ng-show="applications.length === 1" ng-cloak>
+                                	<b>{{assigned_applications.length}}</b> assigned app found
+                                </div>
+                                <div ng-show="applications.length != 1" ng-cloak>
+                                	<b>{{assigned_applications.length}}</b> assigned apps found
+                                </div>
+                         		<!-- <tr ng-show="applications.length === 0" ng-cloak>
+                         			No apps found...
+                         		</tr> -->
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+
+                            </table>
+ 							<div ng-show="assigned_applications.length === 0" style="text-align: center" ng-cloak>
+                                No apps found...
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

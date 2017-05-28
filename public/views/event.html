@@ -1,0 +1,164 @@
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <h5><a ui-sref="applicationProf({appId: vm.application._id})" style="color:inherit">Application: {{vm.application.app_name}}</a></h5>
+        <div class="ibox-tools">
+            
+            </a>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="m-b-md">
+                    <h2>Event #{{vm.event._id}}</h2>
+                </div>
+                <dl class="dl-horizontal pull-left">
+                    <dt>Event Type:</dt>
+                    <dd><span ng-class="vm.typeStyle(vm.event.event_type)">{{vm.event.event_type}}</span></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5">
+                <dl class="dl-horizontal">
+                    <dt>Caused by application:</dt>
+                    <dd style="width:inherit; word-wrap:break-word;max-height:200px;overflow:auto"><a ui-sref="applicationProf({appId: vm.application._id})" class="text-navy">{{vm.application.app_name}}</a></dd>
+                    <dt>Application version:</dt>
+                    <dd>{{vm.application.app_version}}<span ng-show="vm.application.app_version===undefined">undefined</span></dd><br/>
+                </dl>
+            </div>
+            <div class="col-lg-7" id="cluster_info">
+                <dl class="dl-horizontal">
+                    <dt>Event Created:</dt>
+                    <dd>{{vm.event.createdAt | date:'medium'}}</dd>
+                    <dt>Last Updated:</dt>
+                    <dd>{{vm.event.updatedAt | date:'medium'}}</dd>
+                
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <dl class="dl-horizontal">
+                    <dt>Fragment:</dt>
+                    <dd><div style="width:inherit; word-wrap:break-word">{{vm.event.fragment}}</div></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <dl class="dl-horizontal">
+                    <dt>Stack:</dt>
+                    <dd><div style="width:inherit; word-wrap:break-word;max-height:200px;overflow:auto">{{vm.event.stack}}</div></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <dl class="dl-horizontal">
+                    <dt>JSON Data:</dt>
+                    <dd><div style="width:inherit; word-wrap:break-word;max-height:200px;overflow:auto">{{vm.event.data}}</div></dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="m-b-lg">
+            <div class="m-t-md">
+                <br/><br/>
+                <h2>List of events with same fragment</h2>
+                <strong>Found {{vm.filteredEvents.length}} events.</strong>
+            </div>
+        </div>
+
+        <div class="table-responsive" ng-show="vm.filteredEvents.length > 0">
+            <table class="table table-hover issue-tracker">
+                <tbody>
+                    <th>Event type</th>
+                    <th>Event #id</th>
+                    <th>App version</th>
+                    <th>Date created</th>
+                    <tr ng-repeat="e in vm.filteredEvents | orderBy: '-createdAt'">
+                        <td>
+                            <span ng-class="vm.typeStyle(e.event_type)">{{e.event_type}}</span>
+                        </td>
+                        <td class="issue-info">
+                            <a ui-sref="eventPage({appId: vm.application._id, eventId: e._id})">
+                                #{{e._id}}
+                            </a>
+                            <small style="max-width:400px; overflow:hidden">
+                                {{e.stack}}
+                            </small>
+                        </td>
+                        <td>
+                            {{e.app_version}}<span ng-show="e.app_version===undefined">undefined</span>
+                        </td>
+                        <td>
+                            {{e.createdAt | date:'medium'}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="m-b-lg">
+            <div class="m-t-md">
+                <br/><br/>
+                <h2>Event #{{vm.event._id}} comments</h2>
+                <div ng-repeat="c in vm.comments | orderBy: 'createdAt'">
+                    <div class="social-footer" style="margin-bottom:0px">
+                        <div class="social-avatar">
+                            <div class="media-body">
+                                <span ng-init="vm.getUserCommented(c.owner)">
+                                    {{vm.userCommented.first_name}} {{vm.userCommented.last_name}}
+                                </span>
+                                <button class="btn btn-white btn-xs" style="float:right" ng-click="vm.replySubComment(c)"><i class="fa fa-share"></i> Reply</button><br/>
+                                <small class="text-muted">{{c.createdAt | date:'medium'}}</small>
+                            </div>
+                        </div>
+                        <div class="social-body">
+                            <p>
+                                {{c.text}}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="social-feed-box" style="margin-bottom:0px;margin-left:100px" ng-repeat="subcomment in c.comments | orderBy: 'createdAt'">
+                            <div class="social-avatar">
+                                <div class="media-body">
+                                    <span ng-init="vm.getUserCommented(subcomment.owner)">
+                                        {{vm.userCommented.first_name}} {{vm.userCommented.last_name}}
+                                    </span>
+                                    <small class="text-muted">{{subcomment.createdAt | date:'medium'}}</small>
+                                </div>
+                            </div>
+                            <div class="social-body">
+                                <p>
+                                    {{subcomment.text}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="social-comment" style="margin-bottom:40px; margin-left:100px" ng-init="vm.showDialog[c._id]=false" ng-show="vm.showDialog[c._id]">
+                            <div class="media-body" style="height:100px">
+                                <textarea class="form-control" placeholder="Write comment..." style="height:100px" ng-model="vm.subcommentText[c._id]"></textarea>
+                            </div>
+                            <div class="btn-group" style="padding-top:10px;float:right">
+                                <button class="btn btn-white btn-xs" ng-click="vm.postSubComment(c)"><i class="fa fa-comments"></i> Comment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="social-comment">
+                    <div class="media-body" style="height:100px">
+                        <textarea class="form-control" placeholder="Write comment..." style="height:100px" ng-model="vm.commentText"></textarea>
+                    </div>
+                </div>
+                <div class="btn-group" style="padding-top:10px;float:right">
+                    <button class="btn btn-white btn-xs" ng-click="vm.postComment()"><i class="fa fa-comments"></i> Comment</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

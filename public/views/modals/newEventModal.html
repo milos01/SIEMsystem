@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h3 class="modal-title">Creating new event for app</h3>
+</div>
+<div class="modal-body">
+
+   <form name="vm.myForm">
+
+   		<fieldset class="form-group">
+	        <label>Event type</label>
+	        <select class="form-control" id="event_type" name="event_type" ng-model="vm.event_type">
+	        	<option value="">Select type</option>
+	        	<option value="Error">Error</option>
+	        	<option value="Warning">Warning</option>
+	        	<option value="Info">Info</option>
+	        </select>
+			<fieldset class="form-group" ng-class="{ 'has-error' : vm.myForm.data.$invalid && !vm.myForm.data.$pristine}">	
+		        <label>Data</label>
+		        <input type="text" class="form-control" id="data" name="data" ng-model="vm.data" required/>
+		    </fieldset>
+
+			<fieldset class="form-group" ng-class="{ 'has-error' : vm.myForm.stack.$invalid && !vm.myForm.stack.$pristine}">
+				<label>Stack</label>
+		        <input type="text" class="form-control" id="stack" name="stack" ng-model="vm.stack" required/>
+			</fieldset>
+
+			<fieldset class="form-group" ng-class="{ 'has-error' : vm.myForm.fragment.$invalid && !vm.myForm.fragment.$pristine}">
+		        <label>Fragment</label>
+		        <input type="text" class="form-control" id="fragment" name="fragment" ng-model="vm.fragment" required/>
+	        </fieldset>
+
+	        <fieldset class="form-group" ng-class="{ 'has-error' : vm.myForm.dns.$invalid && !vm.myForm.dns.$pristine}">
+		        <label>DNS</label>
+		        <input type="text" class="form-control" id="dns" name="dns" ng-model="vm.dns" required/>
+			</fieldset>
+
+	        <label>App current version</label>
+	        {{vm.ap.app_version}}
+	        <input type="text" class="form-control" id="app_version" name="vm.ap.version" ng-model="vm.ap.version" ng-value="vm.ap.version"/>
+
+	        <div style="color:red" ng-show="vm.dnsError"> Can't find dns! Misspelled dns address! </div>
+	    </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+ <button class="btn btn-info btn-sm" type="button" ng-click="vm.yes()" ng-disabled="vm.myForm.$invalid">Send</button>
+
+  <button class="btn btn-default btn-sm" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>

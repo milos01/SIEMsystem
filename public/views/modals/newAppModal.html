@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h3 class="modal-title">New Application</h3>
+</div>
+<div class="modal-body">
+    <form name="newStaffForm" novalidate>
+        <fieldset class="form-group">
+            <label for="cardNumber">Application name</label>
+            <input type="text" class="form-control" id="cardNumber" name="email" ng-model="vm.app_name" required>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="cardNumber">Description</label>
+            <input type="text" class="form-control" id="cardNumber" name="description" ng-model="vm.description" required>
+        </fieldset>
+
+         <fieldset class="form-group">
+            <label for="cardNumber">DNS</label>
+            <input type="text" class="form-control" id="cardNumber" name="dns" ng-model="vm.dns" required>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="cardNumber">Repo link</label>
+            <input type="text" class="form-control" id="cardNumber" name="repo_link" ng-model="vm.repo_link" required>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="cardNumber">Version</label>
+            <input type="text" class="form-control" id="cardNumber" name="version" ng-model="vm.version" required>
+        </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click= "vm.addNewApp()">Add</button>
+    <button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>

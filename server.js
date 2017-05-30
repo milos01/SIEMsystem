@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
+var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var mongoose = require('mongoose');
 var morgan      = require('morgan');
 var passport = require('passport');
@@ -14,16 +16,23 @@ var eventrouter = require('./server/eventRouter');
 var commentrouter = require('./server/commentRouter');
 require('./config/facebookPassport');
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(express.static('public'))
-
-var port = process.env.PORT || 8080; 
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
+
+var port = process.env.PORT || 8080; 
+
 
 app.use('/', homerouter);
 app.use('/api', approuter);

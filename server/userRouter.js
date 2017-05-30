@@ -38,13 +38,21 @@ userRouter
         res.json(data);
       });
   })
+  // loggedin
+  .get("/loggedin", function(req, res) { 
+      res.json(req.isAuthenticated() ? req.user : '0');
+  })
   //Register user
   .post('/register', authenticationCtrl.register)
   //Logi user
   .post('/login', authenticationCtrl.login)
   .get('/login/facebook', passport.authenticate('facebook'))
-  .get('/login/facebook/return', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
-    res.json("done");
-  });
+  .get('/login/facebook/return', function(req, res, next){var authenticator = passport.authenticate('facebook', { 
+    successRedirect: '/#!/home',
+    failureRedirect: '/' });
+
+    authenticator (req, res, next);
+
+});
   
 module.exports = userRouter;

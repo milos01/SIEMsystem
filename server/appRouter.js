@@ -8,42 +8,46 @@ var Event = require("../model/event");
 var Comment = require("../model/comment");
 var jwt = require('express-jwt');
 
-//Check if token is valid
-var auth = jwt({
-  secret: 'MY_SECRET',
-  userProperty: 'payload'
-});
-
-
 var appRouter = express.Router();
+var isLoggedIn = function (req, res, next) {
 
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated()){
+        return next();
+    }
+    // if they aren't redirect them to the home page
+    res.status(401).json({
+        "message" : "UnauthorizedError: Unauthorized access"
+    });
+  }
 appRouter
   //Get logged user
- .get('/loggedUser', auth, function(req, res){
-    if (!req.payload._id) {
+ .get('/loggedUser',isLoggedIn, function(req, res){
+    if (!req.user) {
       res.status(401).json({
         "message" : "UnauthorizedError: private profile"
       });
     } else {
-      User
-        .findById(req.payload._id)
-        .exec(function(err, user) {
-          res.status(200).json(user);
-        });
+      res.status(200).json(req.user);
+      // User
+      //   .findById(req.payload._id)
+      //   .exec(function(err, user) {
+      //     res.status(200).json(user);
+      //   });
     }
   })
   //Get users owner_applications
-  .get('/user/:id/oapplication', auth, function(req, res, next) {
-    User.findOne({"_id": req.params.id}).populate('owner_applications').exec(function(err, user) {
-      if (err) {
-        return next(err);
-      }
+  .get('/user/:id/oapplication', function(req, res, next) {
+    // User.findOne({"_id": req.params.id}).populate('owner_applications').exec(function(err, user) {
+    //   if (err) {
+    //     return next(err);
+    //   }
 
-      res.json(user.owner_applications);
-    });
+    //   res.json(user.owner_applications);
+    // });
   })
   //Get users assigned_applications
-  .get('/user/:id/applications', auth, function(req, res, next) {
+  .get('/user/:id/applications', function(req, res, next) {
     User.findOne({"_id": req.params.id}).populate('assigned_applications').exec(function(err, user) {
       if (err) {
         return next(err);
@@ -104,7 +108,7 @@ appRouter
     });
   })
   //Get application by id
-  .get('/application/:id', auth, function(req, res, next) {
+  .get('/application/:id', function(req, res, next) {
     if (!req.payload._id) {
       res.status(401).json({
         "message" : "UnauthorizedError: private profile"

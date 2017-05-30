@@ -21,9 +21,11 @@
   "homepage": "https://github.com/milos01/EventLogger#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
     "events": "^1.1.1",
     "express": "^4.14.0",
     "express-jwt": "^5.1.0",
+    "express-session": "^1.15.3",
     "jsonwebtoken": "^7.2.1",
     "mongoose": "^4.6.8",
     "morgan": "^1.7.0",

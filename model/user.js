@@ -1,17 +1,13 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var jwt = require('jsonwebtoken');
+// var jwt = require('jsonwebtoken');
 
 var Schema = mongoose.Schema;
 // kreiramo novu shemu
 
 
 var UsersSchema = new Schema({
-  first_name: {
-    type: String,
-    required: true
-  },
-  last_name: {
+  name: {
     type: String,
     required: true
   },
@@ -20,14 +16,15 @@ var UsersSchema = new Schema({
     required: true,
     unique: true
   },
+  password: String,
   hash: String,
   salt: String,
   createdAt: Date,
   updatedAt: Date,
   // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
   // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
-  owner_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
-  assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
+  // owner_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
+  // assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
 });
 
 

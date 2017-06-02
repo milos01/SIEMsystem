@@ -1,14 +1,3 @@
-<!-- <form class="form-horizontal">
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Full name</label>
-    <p class="form-control-static">{{  vm }}</p>
-  </div>
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Email</label>
-    <p class="form-control-static">{{ vm.user.data.email }}</p>
-    <button ng-click="vm.onLogout()">logout</button>
-  </div>
-</form> -->
 <div class="header">
     <div class="navbar navbar-default" style="background: white" role="navigation">
         <div class="container">
@@ -33,7 +22,7 @@
                 </ul>
                 <!-- Admin options -->
                 <div class="col-md-1 pull-right" style="margin-top: 7px">
-                	<button class="btn btn-default" ng-click="vm.onLogout()">logout</button>
+                	<a href="/api/logout">logout</a>
                 </div>
                 <ul class="nav navbar-nav pull-right">
                     <li><a>{{ vm.user.first_name }} {{ vm.user.last_name }}</a></li>

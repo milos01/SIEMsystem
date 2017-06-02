@@ -48,13 +48,13 @@ appRouter
   })
   //Get users assigned_applications
   .get('/user/:id/applications', function(req, res, next) {
-    User.findOne({"_id": req.params.id}).populate('assigned_applications').exec(function(err, user) {
-      if (err) {
-        return next(err);
-      }
+    // User.findOne({"_id": req.params.id}).populate('assigned_applications').exec(function(err, user) {
+    //   if (err) {
+    //     return next(err);
+    //   }
 
-      res.json(user.assigned_applications);
-    });
+    //   res.json(user.assigned_applications);
+    // });
   })
   //Post new application for user
   .post('/user/:id/application', function(req, res, next) {

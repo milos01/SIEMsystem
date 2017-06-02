@@ -7,27 +7,34 @@ var conf = require('../conf.json');
 passport.use(new facebookStrategy({
     clientID: conf.clientID,
     clientSecret: conf.clientSecret,
-    callbackURL: 'http://localhost:8080/api/login/facebook/return'
+    callbackURL: 'http://localhost:8080/api/login/facebook/return',
+    includeEmail: true,
+    profileFields: ['id', 'displayName' ,'emails']
   },
-  function(accessToken, refreshToken, user, done) {
-    // User.findOne({ email: username }, function (err, user) {
-    //   if (err) { return done(err); }
-    //   // Return if user not found in database
-    //   if (!user) {
-    //     return done(null, false, {
-    //       message: 'User not found'
-    //     });
-    //   }
-    //   // Return if password is wrong
-    //   if (!user.validPassword(password)) {
-    //     return done(null, false, {
-    //       message: 'Password is wrong'
-    //     });
-    //   }
-    //   // If credentials are correct, return the user object
-    //   return done(null, user);
-    // });
-    return done(null, user);
+  function(accessToken, refreshToken, ouser, done) {
+    User.findOne({ email: "milosa942@gmail.com" }, function (err, user) {
+      if (err) { return done(err); }
+      // Return if user not found in database
+      if (!user) {
+          var newUser = new User();
+
+          newUser.name = ouser.displayName;
+          
+          newUser.email = "milosa942@gmail.com";
+
+          newUser.password = "aaa";
+
+          newUser.save(function(err) {
+          if (err){
+               return done(err);
+          }
+          return done(null, newUser);
+          });
+      }else{
+        // If credentials are correct, return the user object
+        return done(null, user);
+     }
+    });
   }
 ));
 

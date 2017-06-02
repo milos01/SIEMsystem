@@ -46,13 +46,25 @@ userRouter
   .post('/register', authenticationCtrl.register)
   //Logi user
   .post('/login', authenticationCtrl.login)
-  .get('/login/facebook', passport.authenticate('facebook'))
+  .get('/login/facebook', passport.authenticate('facebook',{ scope: 'email'}))
+  .get('/login/google', passport.authenticate('google', { scope:
+    [ 'https://www.googleapis.com/auth/plus.login',
+      'https://www.googleapis.com/auth/plus.profile.emails.read' ] }))
+  
   .get('/login/facebook/return', function(req, res, next){var authenticator = passport.authenticate('facebook', { 
     successRedirect: '/#!/home',
     failureRedirect: '/' });
 
     authenticator (req, res, next);
 
-});
+  })
+  .get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+  })
+  .get('/login/google/return', passport.authenticate('google', { 
+    successRedirect: '/#!/home',
+    failureRedirect: '/' 
+  }));
   
 module.exports = userRouter;

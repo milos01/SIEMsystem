@@ -7,15 +7,15 @@ var mongoose = require('mongoose');
 var morgan      = require('morgan');
 var passport = require('passport');
 
-mongoose.connect('mongodb://localhost/eventlogger');
+mongoose.connect('mongodb://localhost/siemcenter');
 
-var homerouter = require('./server/homeRouter');
-var userrouter = require('./server/userRouter');
-var approuter = require('./server/appRouter');
-var eventrouter = require('./server/eventRouter');
-var commentrouter = require('./server/commentRouter');
-require('./config/facebookPassport');
-require('./config/googlePassport');
+var homerouter = require('./server/homeRouter')(app, express);
+var userrouter = require('./server/userRouter')(app, express,passport);
+var approuter = require('./server/appRouter')(app, express);
+var eventrouter = require('./server/eventRouter')(app, express);
+var commentrouter = require('./server/commentRouter')(app, express);
+require('./config/facebookPassport')(passport, mongoose);
+// require('./config/googlePassport');
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({

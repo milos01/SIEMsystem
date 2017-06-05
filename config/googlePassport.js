@@ -1,15 +1,14 @@
 var passport = require('passport');
-var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+var GitHubStrategy = require( 'passport-github2' ).Strategy;
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var conf = require('../conf.json');
 
 
-passport.use(new GoogleStrategy({
-    clientID:     "639218561620-iuu683pvjf2qvdq00jm5rrv1sb26c6b2.apps.googleusercontent.com",
-    clientSecret: "9xl2OqzXi5xfPLE51h9SmDMj",
-    callbackURL: "http://localhost:8080/api/login/google/return",
-    passReqToCallback   : true
+passport.use(new GitHubStrategy({
+    clientID:     'Iv1.0469b50214f699a9',
+    clientSecret: '494a922001de8e2285307db960988ade52ea8c05',
+    callbackURL: 'http://127.0.0.1:8080/api/login/google/return',
   },
   function(request, accessToken, refreshToken, profile, done) {
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {

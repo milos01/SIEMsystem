@@ -12,6 +12,12 @@
 			});
 		}
 
+		retVal.logoutUser =  function(){
+			return Restangular.one('logout').get().then(function(response){
+				return response;
+			});
+		}
+
 
 		return retVal;
 	})

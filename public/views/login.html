@@ -4,7 +4,7 @@
 			<p style="margin-top: -30px; font-family: 'Overpass Mono', monospace;">SIEM center</p>
 			<form name="lognForm" ng-submit="vm.onSubmit()" novalidate>
 			<a href="/api/login/facebook" class="btn btn-default" style="padding: 10px 20px; width: 300px;background: #4267b2;color:white" ng-click="vm.facebookLogin()">Log In with Facebook</a>
-			<a href="/api/login/google" class="btn btn-default" style="padding: 10px 20px; width: 300px;background: #4267b2;color:white" ng-click="vm.facebookLogin()">Log In with Google</a>
+			<!-- <a href="/api/login/google" class="btn btn-default" style="padding: 10px 20px; width: 300px;background: #df4a32;color:white" ng-click="vm.facebookLogin()">Log In with Google</a> -->
 				<hr>
 				<div class="col-md-12" style="font-size: 18px;margin-top: -15px;color: #ccc">or</div>
                 <div class="form-group" ng-class="{ 'has-error' : lognForm.loginEmail.$invalid && lognForm.loginEmail.$error && !lognForm.loginEmail.$pristine }">

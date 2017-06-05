@@ -2,16 +2,16 @@
 	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, $uibModal, $log){
 		var vm = this;
 
-		meanData.getLoggedUser().then(function(user) {
-		   	 ApplicationResource.getAllApps(user.data._id).then(function(items){
-		   	 		$scope.applications = items;
-		   	 });
-		   	 ApplicationResource.getAllAssApps(user.data._id).then(function(items){
-		   	 		$scope.assigned_applications = items;
-		   	 });
-		}, function (e) {
-		      console.log(e);
-		});
+		// meanData.getLoggedUser().then(function(user) {
+		//    	 ApplicationResource.getAllApps(user.data._id).then(function(items){
+		//    	 		$scope.applications = items;
+		//    	 });
+		//    	 ApplicationResource.getAllAssApps(user.data._id).then(function(items){
+		//    	 		$scope.assigned_applications = items;
+		//    	 });
+		// }, function (e) {
+		//       console.log(e);
+		// });
 
 		vm.openReportModal = function() {
         	var modalInstance = $uibModal.open({

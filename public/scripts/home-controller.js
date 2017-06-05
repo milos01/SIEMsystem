@@ -16,7 +16,7 @@
 		  };
 	});
 
-	app.controller('homeCtrl', function($location, meanData, authentication, $state, ApplicationResource){
+	app.controller('homeCtrl', function($location, meanData, $state, UserResource){
 		  var vm = this;
 		  vm.user = {};
 		  $state.go('homelanding');
@@ -25,15 +25,17 @@
 		      vm.user = {
 		      	id: user.data._id,
 		      	email: user.data.email,
-		      	first_name: user.data.displayName,
+		      	name: user.data.name,
 		   	 }
+		   	 console.log(vm.user);
 		    }, function (e) {
 		      console.log(e);
 		    });
 
-		    vm.onLogout = function(){
-		    	authentication.logout();
-		    	$location.path('/');
+		    vm.logout = function(){
+		    	UserResource.logoutUser().then(function(res){
+					 $location.path('land');
+				});
 		    }
 	});
 

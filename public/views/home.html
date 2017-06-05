@@ -12,7 +12,7 @@
                 </button>
 
                 <a class="navbar-brand" style="font-family: 'Overpass Mono', monospace;" ui-sref-active="homelanding" ui-sref="homelanding">
-                Event logger &#60/></a>
+                SIEM center</a>
             </div>
 
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
@@ -21,11 +21,11 @@
                     <li><a >About</a></li>
                 </ul>
                 <!-- Admin options -->
-                <div class="col-md-1 pull-right" style="margin-top: 7px">
-                	<a href="/api/logout">logout</a>
-                </div>
+                <ul class="nav navbar-nav pull-right" ui-sref-active="current" ng-click="vm.logout()">
+                    <li><a>logout</a></li>
+                </ul>
                 <ul class="nav navbar-nav pull-right">
-                    <li><a>{{ vm.user.first_name }} {{ vm.user.last_name }}</a></li>
+                    <li><a>{{ vm.user.name }}</a></li>
                 </ul>
             </div>
 

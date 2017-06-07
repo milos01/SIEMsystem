@@ -1,5 +1,5 @@
 (function () {
-	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, $uibModal, $log){
+	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, $uibModal, $log, toastr){
 		var vm = this;
 
 		// meanData.getLoggedUser().then(function(user) {
@@ -14,17 +14,7 @@
 		// });
 
 		vm.openReportModal = function() {
-        	var modalInstance = $uibModal.open({
-        	   templateUrl: '/views/modals/newAppModal.html',
-        	   controller: 'ReportModalCtrl as vm',
-        	   scope: $scope
-        	});
-        
-        	modalInstance.result.then(function(value) {
-        	    $log.info('Modal finished its job at: ' + new Date() + ' with value: ' + value);
-        		}, function(value) {
-        	    $log.info('Modal dismissed at: ' + new Date() + ' with value: ' + value);
-        	    });
+        	toastr.error('Log message', 'Log name');
         };
 
         vm.deleteApp = function(aid){

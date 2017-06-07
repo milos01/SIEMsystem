@@ -1,6 +1,6 @@
 (function (angular) {
 
-  app = angular.module('EventLoggerApp', ['ui.router', 'restangular', 'ui.bootstrap', 'hSweetAlert']);
+  app = angular.module('EventLoggerApp', ['ui.router', 'restangular', 'ui.bootstrap', 'hSweetAlert', 'toastr']);
 
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $qProvider){
     $qProvider.errorOnUnhandledRejections(false);
@@ -29,9 +29,9 @@
                 templateUrl: "/views/home.html",
                 controller: 'homeCtrl',
                 controllerAs: 'vm',
-                resolve: {
-                    logincheck: checkLoggedin
-                }
+                // resolve: {
+                //     logincheck: checkLoggedin
+                // }
             }
         }
     })

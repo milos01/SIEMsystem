@@ -8,24 +8,23 @@
 		  };
 
 		  vm.onSubmit = function () {
-		    authentication
-		    .login(vm.credentials)
-		    .then(function(){
+		    authentication.login(vm.credentials).then(function(){
 		      $location.path('home');
 		    });
 		  };
 	});
 
-	app.controller('homeCtrl', function($location, meanData, $state, UserResource){
+	app.controller('homeCtrl', function($location, meanData, $state, UserResource,authentication){
+		if(authentication.isLoggedIn()){
 		  var vm = this;
 		  vm.user = {};
 		  $state.go('homelanding');
-		  meanData.getLoggedUser()
+		  meanData.getLoggedUserApp()
 		    .then(function(user) {
 		      vm.user = {
 		      	id: user.data._id,
 		      	email: user.data.email,
-		      	name: user.data.name,
+		      	name: user.data.first_name,
 		   	 }
 		   	 console.log(vm.user);
 		    }, function (e) {
@@ -33,10 +32,16 @@
 		    });
 
 		    vm.logout = function(){
-		    	UserResource.logoutUser().then(function(res){
-					 $location.path('land');
-				});
+		    	//Logout for social oauth login
+		  //   	UserResource.logoutUser().then(function(res){
+				// 	 $location.path('land');
+				// });
+				authentication.logout();
+		    	$location.path('/');
 		    }
+		  }else{
+		  	$location.path('/');
+		  }
 	});
 
 	app.controller('someCtrl', function(){

@@ -3,14 +3,36 @@ var app = express();
 var bodyParser = require('body-parser');
 var jwt    = require('jsonwebtoken');
 var User = require('../model/user');
+var UserApp = require('../model/UserApp');
 var Application = require("../model/application");
 var Event = require("../model/event");
 var Comment = require("../model/comment");
+var jwt = require('express-jwt');
+
+//Check if token is valid
+var auth = jwt({
+  secret: 'MY_SECRET',
+  userProperty: 'payload'
+});
 
 module.exports = function(app, express){
   var appRouter = express.Router();
 
   appRouter
+  //Get logged user
+ .get('/loggedUserr', auth, function(req, res){
+    if (!req.payload._id) {
+      res.status(401).json({
+        "message" : "UnauthorizedError: private profile"
+      });
+    } else {
+      UserApp
+        .findById(req.payload._id)
+        .exec(function(err, user) {
+          res.status(200).json(user);
+        });
+    }
+  })
   //Post new application for user
   .post('/user/:id/application', function(req, res, next) {
     var application = new Application(req.body);

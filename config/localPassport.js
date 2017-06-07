@@ -1,9 +1,8 @@
-var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
+var User = require('../model/UserApp');
 
-passport.use(new LocalStrategy({
+module.exports = function(passport, mongoose){
+  passport.use(new LocalStrategy({
     usernameField: 'email'
   },
   function(username, password, done) {
@@ -25,4 +24,5 @@ passport.use(new LocalStrategy({
       return done(null, user);
     });
   }
-));
+  ));
+}

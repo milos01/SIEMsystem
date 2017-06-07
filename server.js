@@ -15,6 +15,7 @@ var approuter = require('./server/appRouter')(app, express);
 var eventrouter = require('./server/eventRouter')(app, express);
 var commentrouter = require('./server/commentRouter')(app, express);
 require('./config/facebookPassport')(passport, mongoose);
+require('./config/localPassport')(passport, mongoose);
 // require('./config/googlePassport');
 
 app.use(cookieParser());

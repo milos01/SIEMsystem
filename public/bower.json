@@ -26,6 +26,7 @@
     "lodash": "^4.17.4",
     "angular-bootstrap": "^2.4.0",
     "ngSweetAlert": "angular-sweetalert#^1.1.2",
-    "angular-sweetalert": "angular-h-sweetalert#^1.4.7"
+    "angular-sweetalert": "angular-h-sweetalert#^1.4.7",
+    "angular-toastr": "^2.1.1"
   }
 }

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/milos01/EventLogger#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "events": "^1.1.1",
@@ -36,6 +37,7 @@
     "passport-github2": "^0.1.10",
     "passport-google-oauth": "^1.0.0",
     "passport-google-oauth2": "^0.1.6",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "randomstring": "^1.1.5"
   }
 }

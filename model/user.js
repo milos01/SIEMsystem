@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 // var jwt = require('jsonwebtoken');
 
@@ -16,7 +17,8 @@ var UsersSchema = new Schema({
     required: true,
     unique: true
   },
-  password: String,
+  hash: String,
+  salt: String,
   createdAt: Date,
   updatedAt: Date,
   // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
@@ -24,6 +26,15 @@ var UsersSchema = new Schema({
   // owner_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
   // assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
 });
+
+UsersSchema.methods.setPassword = function(password){
+  this.salt = bcrypt.genSaltSync(10);
+  this.hash = bcrypt.hashSync(password, this.salt);
+};
+
+UsersSchema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.hash);
+};
 // prilikom snimanja se postavi datum
 UsersSchema.pre('save', function(next) {
   // preuzmemo trenutni datum

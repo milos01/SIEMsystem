@@ -1,6 +1,8 @@
 var facebookStrategy = require('passport-facebook').Strategy;
+var randomstring = require("randomstring");
 var User = require('../model/user');
 var conf = require('../conf.json');
+
 
 module.exports = function(passport, mongoose){
   passport.use(new facebookStrategy({
@@ -15,13 +17,17 @@ module.exports = function(passport, mongoose){
       if (err) { return done(err); }
         // Return if user not found in database
         if (!user) {
+            var password = randomstring.generate({
+              length: 10,
+              charset: 'alphanumeric'
+            });
             var newUser = new User();
 
             newUser.name = ouser.displayName;
             
             newUser.email = "milosa942@gmail.com";
 
-            newUser.password = "aaa";
+            newUser.setPassword(password);
 
             newUser.save(function(err) {
             if (err){

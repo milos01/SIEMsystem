@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var crypto = require('crypto');
+var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
 var Schema = mongoose.Schema;
@@ -24,22 +24,18 @@ var UserAppSchema = new Schema({
   salt: String,
   createdAt: Date,
   updatedAt: Date,
-  // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
-  // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
-  owner_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
-  assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
+  // owner_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
+  // assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
 });
 
 
 UserAppSchema.methods.setPassword = function(password){
-  console.log(password);
-  this.salt = crypto.randomBytes(16).toString('hex');
-  this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
+  this.salt = bcrypt.genSaltSync(10);
+  this.hash = bcrypt.hashSync(password, this.salt);
 };
 
 UserAppSchema.methods.validPassword = function(password) {
-  var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
-  return this.hash === hash;
+  return bcrypt.compareSync(password, this.hash);
 };
 
 UserAppSchema.methods.generateJwt = function() {

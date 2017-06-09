@@ -3,7 +3,10 @@ var authenticationCtrl = require('../controllers/authentication');
 
 module.exports = function(app, express, passport){
   //Check if user is logged in system
+
   var isLoggedIn = function (req, res, next) {
+    //Check if token is valid
+    
 
     // if user is authenticated in the session, carry on
     if (req.isAuthenticated()){

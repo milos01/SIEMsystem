@@ -15,7 +15,6 @@
 	});
 
 	app.controller('homeCtrl', function($location, meanData, $state, UserResource,authentication){
-		if(authentication.isLoggedIn()){
 		  var vm = this;
 		  vm.user = {};
 		  $state.go('homelanding');
@@ -32,16 +31,16 @@
 		    });
 
 		    vm.logout = function(){
-		    	//Logout for social oauth login
-		  //   	UserResource.logoutUser().then(function(res){
-				// 	 $location.path('land');
-				// });
-				authentication.logout();
-		    	$location.path('/');
+				if(authentication.getToken()){
+					authentication.logout();
+		    		$location.path('/');
+				}else{
+					UserResource.logoutUser().then(function(res){
+						$location.path('/');
+					});
+				}
+				
 		    }
-		  }else{
-		  	$location.path('/');
-		  }
 	});
 
 	app.controller('someCtrl', function(){

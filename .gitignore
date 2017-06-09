@@ -29,6 +29,7 @@ build/Release
 
 # Dependency directories
 node_modules
+
 jspm_packages
 
 # Optional npm cache directory
@@ -45,6 +46,7 @@ jspm_packages
 
 # Yarn Integrity file
 .yarn-integrity
+
 /public/bower_components
 /public/js
 /public/css

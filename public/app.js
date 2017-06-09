@@ -95,7 +95,7 @@
         });
 });
 
-var checkLoggedin = function($q, $timeout, $http, $location, $rootScope) {
+var checkLoggedin = function($q, $timeout, $http, $location, $rootScope, authentication) {
     var deferred = $q.defer();
     
     $http.get('/api/loggedin').then(function(user) {
@@ -105,26 +105,27 @@ var checkLoggedin = function($q, $timeout, $http, $location, $rootScope) {
           $rootScope.currentUser = user;
           deferred.resolve();
         } else { //User is not Authenticated
-          $rootScope.errorMessage = 'You need to log in.';
           deferred.reject();
-          $location.url('/');
         }
       });
     return deferred.promise;
   }
 
-var checkNotLoggedin = function($q, $timeout, $http, $location, $rootScope) {
+var checkNotLoggedin = function($q, $timeout, $http, $location, $rootScope, authentication) {
     var deferred = $q.defer();
     
     $http.get('/api/loggedin').then(function(user) {
-      console.log(user);
       $rootScope.errorMessage = null;
         //User is Authenticated
         if (user.data !== false) {
-          $rootScope.errorMessage = 'You need to log in.';
           deferred.reject();
-          $location.url('/');
-        } else { //User is not Authenticated
+          // $location.url('/home');
+        } else { 
+          //   console.log(authentication.isLoggedIn());//User is not Authenticated
+          if(authentication.isLoggedIn()){
+            console.log('aaa');
+            deferred.reject();
+          }
           $rootScope.currentUser = user;
           deferred.resolve();
         }

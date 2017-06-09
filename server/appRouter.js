@@ -20,11 +20,21 @@ module.exports = function(app, express){
 
   appRouter
   //Get logged user
+  // !!! Insert this inside node_modules/express-jwt/lib/index.js !!!
+  // This is addition to auth middleware to check bot social and local sessions.
+  // if(req.isAuthenticated()){
+  //     return next();
+  //   }
  .get('/loggedUserr', auth, function(req, res){
-    if (!req.payload._id) {
-      res.status(401).json({
-        "message" : "UnauthorizedError: private profile"
-      });
+    // console.log(req.payload);
+    if (req.payload == null) {
+      if(req.user){
+        res.status(200).json(req.user);
+      }else{
+        res.status(401).json({
+          "message" : "UnauthorizedError: private profile"
+        });
+      }
     } else {
       UserApp
         .findById(req.payload._id)

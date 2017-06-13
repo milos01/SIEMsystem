@@ -16,16 +16,10 @@
 
 	app.controller('homeCtrl', function($location, meanData, $state, UserResource,authentication){
 		  var vm = this;
-		  vm.user = {};
-		  $state.go('homelanding');
+		  
 		  meanData.getLoggedUserApp()
-		    .then(function(user) {
-		      vm.user = {
-		      	id: user.data._id,
-		      	email: user.data.email,
-		      	name: user.data.first_name,
-		   	 }
-		   	 console.log(vm.user);
+		    .then(function(user) { 
+		   	 $state.go('homelanding');
 		    }, function (e) {
 		      console.log(e);
 		    });

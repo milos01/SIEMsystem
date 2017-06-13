@@ -1,6 +1,7 @@
 var facebookStrategy = require('passport-facebook').Strategy;
 var randomstring = require("randomstring");
 var User = require('../model/user');
+var Role = require('../model/role');
 var conf = require('../conf.json');
 
 
@@ -15,6 +16,8 @@ module.exports = function(passport, mongoose){
   function(accessToken, refreshToken, ouser, done) {
     User.findOne({ email: "milosa942@gmail.com" }, function (err, user) {
       if (err) { return done(err); }
+      Role.findOne({role_name: 'regular'}, function(err, role){
+        if (err) {return done(err);}
         // Return if user not found in database
         if (!user) {
             var password = randomstring.generate({
@@ -29,6 +32,8 @@ module.exports = function(passport, mongoose){
 
             newUser.setPassword(password);
 
+            newUser.role.push(role);
+
             newUser.save(function(err) {
             if (err){
                  return done(err);
@@ -40,7 +45,8 @@ module.exports = function(passport, mongoose){
           return done(null, user);
         }
       });
-    }
+    });
+  }
   ));
 
   passport.serializeUser(function(user, cb) {

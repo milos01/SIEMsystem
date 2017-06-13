@@ -19,10 +19,10 @@ var UsersSchema = new Schema({
   },
   hash: String,
   salt: String,
+  provider: String,
+  role: [{type: Schema.Types.ObjectId, ref: 'Role'}],
   createdAt: Date,
   updatedAt: Date,
-  // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
-  // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
   // owner_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
   // assigned_applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
 });
@@ -31,6 +31,11 @@ UsersSchema.methods.setPassword = function(password){
   this.salt = bcrypt.genSaltSync(10);
   this.hash = bcrypt.hashSync(password, this.salt);
 };
+
+UsersSchema.methods.hasRole = function(roleName){
+  console.log(roleName);
+  return true;
+}
 
 UsersSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.hash);

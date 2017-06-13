@@ -4,11 +4,14 @@ var bodyParser = require('body-parser');
 var jwt    = require('jsonwebtoken');
 var User = require('../model/user');
 var UserApp = require('../model/UserApp');
+var User = require('../model/user');
 var Application = require("../model/application");
 var Event = require("../model/event");
 var Comment = require("../model/comment");
+var permit = require("../server/middleware/permission");
 var jwt = require('express-jwt');
 
+var user = new User();
 //Check if token is valid
 var auth = jwt({
   secret: 'MY_SECRET',
@@ -25,11 +28,19 @@ module.exports = function(app, express){
   // if(req.isAuthenticated()){
   //     return next();
   //   }
+  .get('/test', auth, permit('admin'), function(req, res){
+    
+    
+  })
  .get('/loggedUserr', auth, function(req, res){
     // console.log(req.payload);
     if (req.payload == null) {
       if(req.user){
-        res.status(200).json(req.user);
+        User
+        .findById(req.user._id).populate('role')
+        .exec(function(err, user) {
+          res.status(200).json(user);
+        });
       }else{
         res.status(401).json({
           "message" : "UnauthorizedError: private profile"
@@ -37,7 +48,7 @@ module.exports = function(app, express){
       }
     } else {
       UserApp
-        .findById(req.payload._id)
+        .findById(req.payload._id).populate('role')
         .exec(function(err, user) {
           res.status(200).json(user);
         });

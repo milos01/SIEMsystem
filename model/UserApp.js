@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 
 
 var UserAppSchema = new Schema({
-  first_name: {
+  name: {
     type: String,
     required: true
   },
@@ -20,6 +20,7 @@ var UserAppSchema = new Schema({
     required: true,
     unique: true
   },
+  role: [{type: Schema.Types.ObjectId, ref: 'Role'}],
   hash: String,
   salt: String,
   createdAt: Date,

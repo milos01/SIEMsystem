@@ -64,7 +64,7 @@ app.service('authentication', function($http, $window){
     };
 });
 //Servise for getting logged user
-app.service('meanData', function($http, authentication){
+app.service('meanData', function($http, $rootScope, authentication){
   var getLoggedUser = function () {
     return $http.get('/api/loggedUser');
   };
@@ -74,6 +74,8 @@ app.service('meanData', function($http, authentication){
       headers: {
         Authorization: 'Bearer '+ authentication.getToken()
       }
+    }).then(function(res){
+      $rootScope.currentUser = res.data;
     });
   };
 

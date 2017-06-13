@@ -15,7 +15,7 @@
                 controller: 'loginCtrl',
                 controllerAs: 'vm',
                 resolve: {
-                    logincheck : checkNotLoggedin
+                    loginCheck : checkNotLoggedin
                 }
             }
         }
@@ -29,9 +29,6 @@
                 templateUrl: "/views/home.html",
                 controller: 'homeCtrl',
                 controllerAs: 'vm',
-                // resolve: {
-                //     logincheck: checkLoggedin
-                // }
             }
         }
     })
@@ -50,7 +47,10 @@
         views: {
             'profileView@home': {
                 templateUrl: "/views/event.html",
-                controller: "someCtrl"
+                controller: "someCtrl",
+                resolve: {
+                    adminPermit: adminPermit
+                }
             }
         }
     })
@@ -95,14 +95,20 @@
         });
 });
 
+var adminPermit = function($q, $rootScope){
+    var deferred = $q.defer();
+    console.log($rootScope.currentUser);
+    deferred.resolve();
+    return deferred.promise;
+}
+
 var checkLoggedin = function($q, $timeout, $http, $location, $rootScope, authentication) {
     var deferred = $q.defer();
     
     $http.get('/api/loggedin').then(function(user) {
-      $rootScope.errorMessage = null;
+      // $rootScope.errorMessage = null;
         //User is Authenticated
         if (user.data !== false) {
-          $rootScope.currentUser = user;
           deferred.resolve();
         } else { //User is not Authenticated
           deferred.reject();
@@ -115,7 +121,7 @@ var checkNotLoggedin = function($q, $timeout, $http, $location, $rootScope, auth
     var deferred = $q.defer();
     
     $http.get('/api/loggedin').then(function(user) {
-      $rootScope.errorMessage = null;
+      // $rootScope.errorMessage = null;
         //User is Authenticated
         if (user.data !== false) {
           deferred.reject();
@@ -123,10 +129,10 @@ var checkNotLoggedin = function($q, $timeout, $http, $location, $rootScope, auth
         } else { 
           //   console.log(authentication.isLoggedIn());//User is not Authenticated
           if(authentication.isLoggedIn()){
-            console.log('aaa');
+            
             deferred.reject();
           }
-          $rootScope.currentUser = user;
+          // $rootScope.currentUser = user;
           deferred.resolve();
         }
       });

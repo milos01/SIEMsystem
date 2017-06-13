@@ -1,27 +1,28 @@
 var passport = require('passport');
 var mongoose = require('mongoose');
 var User = require('../model/UserApp');
+var Role = require('../model/role');
 
 module.exports.register = function(req, res) {
-  var user = new User();
+  Role.findOne({role_name: 'admin'}, function(err, role){
+    var user = new User();
+    user.name = req.body.first_name;
+    user.last_name = req.body.last_name;
+    user.email = req.body.email;
 
-  user.first_name = req.body.first_name;
-  user.last_name = req.body.last_name;
-  user.email = req.body.email;
-
-  user.setPassword(req.body.password);
-
-  user.save(function(err) {
-  	if(err){
-  		 res.json({
-		      "err" : err
-		    });
-  	}
-    var token;
-    token = user.generateJwt();
-    res.status(200);
-    res.json({
-      "token" : token
+    user.setPassword(req.body.password);
+    user.role.push(role);
+    user.save(function(err) {
+      if(err){
+         return res.json({
+            "err" : err
+          });
+      }
+      var token;
+      token = user.generateJwt();
+      res.status(200).json({
+        "token" : token
+      });
     });
   });
 };

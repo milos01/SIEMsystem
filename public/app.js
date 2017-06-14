@@ -42,7 +42,16 @@
             }
         }
     })
-    .state('somepage', {
+    .state('alarms', {
+        parent: 'home',
+        views: {
+            'profileView@home': {
+                templateUrl: "/views/event.html",
+                controller: "someCtrl",
+            }
+        }
+    })
+    .state('alarmRules', {
         parent: 'home',
         views: {
             'profileView@home': {
@@ -54,14 +63,13 @@
             }
         }
     })
-    .state('applicationProf', {
+    .state('profile', {
         parent: 'home',
-        params : { appId: null },
         views: {
             'profileView@home': {
-                url: "applicationProf/:appId",
-                templateUrl: "/views/aplication.html",
-                controller: "eventlCtrl",
+                url: "profile",
+                templateUrl: "/views/profile.html",
+                controller: "profileCtrl",
                 controllerAs: 'vm'
 
             }

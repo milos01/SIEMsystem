@@ -18,7 +18,7 @@ var auth = jwt({
   userProperty: 'payload'
 });
 
-module.exports = function(app, express){
+module.exports = function(app, express, csrf){
   var appRouter = express.Router();
 
   appRouter
@@ -28,7 +28,7 @@ module.exports = function(app, express){
   // if(req.isAuthenticated()){
   //     return next();
   //   }
-  .get('/test', auth, permit('admin'), function(req, res){
+  .post('/test', csrf, auth, permit('admin'), function(req, res){
     
     
   })

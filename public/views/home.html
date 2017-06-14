@@ -17,14 +17,17 @@
 
             <div class="collapse navbar-collapse" id="js-navbar-collapse">
 				<!-- Regular user options -->
-				<ul class="nav navbar-nav" ui-sref-active="current" ui-sref="somepage">
-                    <li><a >About</a></li>
+				<ul class="nav navbar-nav" ui-sref-active="current" ui-sref="alarms">
+                    <li><a >Alarms</a></li>
+                </ul>
+                <ul class="nav navbar-nav" ui-sref-active="current" ui-sref="alarmRules" ng-show="currentUser.role[0].role_name === 'admin'">
+                    <li><a >Create alarm rules</a></li>
                 </ul>
                 <!-- Admin options -->
                 <ul class="nav navbar-nav pull-right" ui-sref-active="current" ng-click="vm.logout()">
                     <li><a>logout</a></li>
                 </ul>
-                <ul class="nav navbar-nav pull-right">
+                <ul class="nav navbar-nav pull-right" ui-sref-active="current" ui-sref="profile">
                     <li><a>{{ currentUser.name }}</a></li>
                 </ul>
             </div>

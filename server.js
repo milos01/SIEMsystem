@@ -9,9 +9,12 @@ var passport = require('passport');
 
 mongoose.connect('mongodb://localhost/siemcenter');
 
+var csrf = require('csurf');
+var csrfProtection = csrf({ cookie: true });
+
 var homerouter = require('./server/homeRouter')(app, express);
 var userrouter = require('./server/userRouter')(app, express,passport);
-var approuter = require('./server/appRouter')(app, express);
+var approuter = require('./server/appRouter')(app, express, csrfProtection);
 var eventrouter = require('./server/eventRouter')(app, express);
 var commentrouter = require('./server/commentRouter')(app, express);
 require('./config/facebookPassport')(passport, mongoose);

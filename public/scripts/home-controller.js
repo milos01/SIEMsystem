@@ -1,5 +1,5 @@
 (function () {
-	app.controller('loginCtrl', function(authentication, $location){
+	app.controller('loginCtrl', function(Restangular, authentication, $location){
 		  var vm = this;
 
 		  vm.credentials = {
@@ -9,6 +9,7 @@
 
 		  vm.onSubmit = function () {
 		    authentication.login(vm.credentials).then(function(){
+		      Restangular.setDefaultHeaders({Authorization: 'Bearer '+ authentication.getToken()});
 		      $location.path('home');
 		    });
 		  };

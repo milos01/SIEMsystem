@@ -18,6 +18,12 @@
 			});
 		}
 
+		retVal.updatePassword =  function(params){
+			return Restangular.all('userpass').post(params).then(function(response){
+				return response;
+			});
+		}
+
 
 		return retVal;
 	})

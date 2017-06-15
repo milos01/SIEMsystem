@@ -1,7 +1,8 @@
-var User = require('../model/user');
+var UserApp = require('../model/UserApp');
 var authenticationCtrl = require('../controllers/authentication');
 
-module.exports = function(app, express, passport){
+
+module.exports = function(app, express, passport, auth){
   //Check if user is logged in system
 
   var isLoggedIn = function (req, res, next) {
@@ -73,6 +74,9 @@ module.exports = function(app, express, passport){
   .get("/loggedin", function(req, res) { 
       res.json(req.isAuthenticated() ? true : false);
   })
+
+  //User password update 
+  
 
   //Register user
   .post('/register', authenticationCtrl.register)

@@ -12,11 +12,11 @@
                 <div class="m-b-md">
                     <h2>Password update #</h2>
                 </div>
-               <form action="/api/test" method="POST">
+               <form ng-submit="vm.updatePassword()">
                   <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-                  <p>Old password: <input class="form-control" style="width: 250px" type="password" name="oldPassword"></p>
-                  <p>New password: <input class="form-control" style="width: 250px" type="password" name="newPassword"></p>
+                  <p>Old password: <input class="form-control" style="width: 250px" type="password" ng-model="vm.oldPassword" name="oldPassword"></p>
+                  <p>New password: <input class="form-control" style="width: 250px" type="password" ng-model="vm.newPassword" name="newPassword"></p>
                   <button class="btn btn-default" type="submit">Submit</button>
                 </form>
             </div>

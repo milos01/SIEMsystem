@@ -9,16 +9,11 @@ var Application = require("../model/application");
 var Event = require("../model/event");
 var Comment = require("../model/comment");
 var permit = require("../server/middleware/permission");
-var jwt = require('express-jwt');
 
 var user = new User();
 //Check if token is valid
-var auth = jwt({
-  secret: 'MY_SECRET',
-  userProperty: 'payload'
-});
 
-module.exports = function(app, express, csrf){
+module.exports = function(app, express, csrf, auth){
   var appRouter = express.Router();
 
   appRouter
@@ -33,7 +28,7 @@ module.exports = function(app, express, csrf){
     
   })
  .get('/loggedUserr', auth, function(req, res){
-    // console.log(req.payload);
+   
     if (req.payload == null) {
       if(req.user){
         User
@@ -53,6 +48,31 @@ module.exports = function(app, express, csrf){
           res.status(200).json(user);
         });
     }
+  })
+
+ .post("/userpass", auth, function(req, res, done) { 
+    var oldPass = req.body.oldPassword;
+    var newPass = req.body.newPassword;
+    if (req.payload) {
+      UserApp.findById(req.payload._id).exec(function(err, user) {
+        if(user.validPassword(oldPass)){
+          user.setPassword(newPass);
+
+          user.save(function(err) {
+          if (err){
+            return done(err);
+          }
+            return res.status(200).json(user);
+          });
+        }else{
+          res.status(400).json("Not same old password!");
+         
+        }
+        
+      });
+    }else{
+      res.json("boo");
+    } 
   })
   //Post new application for user
   .post('/user/:id/application', function(req, res, next) {

@@ -92,7 +92,6 @@
 
 })
   .run(function(Restangular, $log, authentication) {
-    // Restangular.setDefaultHeaders({Authorization: 'Bearer '+ authentication.getToken()});
     Restangular.setBaseUrl("api");
     Restangular.setErrorInterceptor(function(response) {
         if (response.status === 500) {

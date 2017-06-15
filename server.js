@@ -6,15 +6,20 @@ var session = require('express-session');
 var mongoose = require('mongoose');
 var morgan      = require('morgan');
 var passport = require('passport');
+var jwt = require('express-jwt');
 
+var auth = jwt({
+  secret: 'MY_SECRET',
+  userProperty: 'payload'
+});
 mongoose.connect('mongodb://localhost/siemcenter');
 
 var csrf = require('csurf');
 var csrfProtection = csrf({ cookie: true });
 
 var homerouter = require('./server/homeRouter')(app, express);
-var userrouter = require('./server/userRouter')(app, express,passport);
-var approuter = require('./server/appRouter')(app, express, csrfProtection);
+var userrouter = require('./server/userRouter')(app, express,passport, auth);
+var approuter = require('./server/appRouter')(app, express, csrfProtection, auth);
 var eventrouter = require('./server/eventRouter')(app, express);
 var commentrouter = require('./server/commentRouter')(app, express);
 require('./config/facebookPassport')(passport, mongoose);

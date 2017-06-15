@@ -55,27 +55,29 @@ def readLogs(currTimeAuth,currTimeSYS):
              #   jsonAuth = "["
                 print "_______SALJEM AUTH NA SERVER__________"
                 for line in cont[lastLineAuthIndex+1:]:
-                    text = ""
+                    jsonData = {}
 
                     date = line.split(socket.gethostname())[0]
                     logType = "Info"
                     message = line.split(socket.gethostname())[1]
                     
-                    text = "Date of log:" + date +"; Log type:"+logType + "; Log message:" + message
+                    text = str(date) + str(logType) + str(message) + str(platform.system())
+                    jsonData = {'Date':date,'System':platform.system(),'Type':logType,'Message':message,'ComputerName':socket.gethostname()}
+                    hash_of_agent_message = SHA256.new(text).digest()
+                    signature_agent       = keypair_agent.sign(hash_of_agent_message, '')
                     
-                    payload = {"text":text}
-                    
+                    jsonData['Signature'] = signature_agent
+                  
+                    print json.dumps(jsonData)
+
                     try:
-                        r = requests.post(URL, data=payload)
+                        r = requests.post(URL, data=json.dumps(jsonData))
+                        print r.status_code
                     except ConnectionError as e:
                         print e
                         
-                   # print r.status_code
-              #      print count
-               #     jsonAuth = jsonAuth + "{date:" + line.split("mladen-Lenovo-G580")[0]+","+"/n"
-                #    +"message:"+line.split("mladen-Lenovo-G580")[1] + "},"
-                    print line
-                #jsonAuth = jsonAuth + "]"  
+                 #   print line
+            
                 print "*********************************************"
                 currTimeAuth = prevTimeAuth
                 time.sleep(20)
@@ -92,9 +94,8 @@ def readLogs(currTimeAuth,currTimeSYS):
                 print "_______SALJEM SYS NA SERVER__________"
                 for line in contSYS[lastLineSYSIndex+1:]:
                     
-                    text = ""
-
-                    date = line.split(socket.gethostname())[0]
+                    jsonData = {}
+                    
                     if "WARNING" in line:
                         logType = "WARNING"
                     elif "CRITICAL" in line:
@@ -105,19 +106,25 @@ def readLogs(currTimeAuth,currTimeSYS):
                         logType = "INFO"
                         
                     message = line.split(socket.gethostname())[1]
+                    date = line.split(socket.gethostname())[0]
+                   
+                    text = str(date) + str(logType) + str(message) + str(platform.system())
+                    jsonData = {'Date':date,'System':platform.system(),'Type':logType,'Message':message,'ComputerName':socket.gethostname()}
+                    hash_of_agent_message = SHA256.new(text).digest()
+                    signature_agent       = keypair_agent.sign(hash_of_agent_message, '')
                     
-                    text = "Date of log:" + date +"; Log type:"+logType + "; Log message:" + message
-                    
-                    payload = {"text":text}
+                    jsonData['Signature'] = signature_agent
+                  
+                    print json.dumps(jsonData)
                     
                     try:
-                        r = requests.post(URL, data=payload)
+                        r = requests.post(URL, data=json.dumps(jsonData))
                     except ConnectionError as e:
                         print e
                         
-                  #  print r.status_code
+              
                     
-                    print line
+                #    print line
                 
                 print "*********************************************"
                 currTimeSYS = prevTimeSYS
@@ -129,7 +136,52 @@ def readLogs(currTimeAuth,currTimeSYS):
 if __name__=="__main__":
     currTimeMAuth = os.stat("/var/log/auth.log").st_mtime
     currTimeSYS = os.stat("/var/log/syslog").st_mtime
+    
+    # Use a larger key length in practice...
+    KEY_LENGTH = 1024  # Key size (in bits)
+    random_gen = Random.new().read
+    
+    if os.stat("pubkey").st_size == 0:
+        
+        random_gen = Random.new().read
+        
+        # Generate RSA private/public key pairs for both parties...
+        keypair_agent = RSA.generate(KEY_LENGTH, random_gen)
+        pubkey_agent  = keypair_agent.publickey()
+        
+        with open('pubkey', 'wb') as output:
+            
+            pickle.dump(pubkey_agent, output, pickle.HIGHEST_PROTOCOL)
+            
+        with open('privatekey','wb') as output:
+            pickle.dump(keypair_agent, output, pickle.HIGHEST_PROTOCOL)
+    else:
+        print "NE"
+        with open('privatekey', 'rb') as input:
+            keypair_agent = pickle.load(input)
+            
+        with open('pubkey', 'rb') as input:
+            pubkey_agent = pickle.load(input)
+            
     readLogs(currTimeMAuth,currTimeSYS)
-    #print socket.gethostname()
+   
+    """
+    text = "aaaaaasadasdadada"
+    hash_of_agent_message = SHA256.new(text).digest()
+    print hash_of_agent_message
+    signature_agent       = keypair_agent.sign(hash_of_agent_message, '')
+    print hash_of_agent_message
+    print signature_agent
 
+    
+    text = "aaaaa"
+    desifrovanHESH = SHA256.new(text).digest()
+    
+    if pubkey_agent.verify(desifrovanHESH, signature_agent):
+        print "Poruka ka SIEM:"
+        print "Nema izmene"
+        print ""
+    else:
+        print "Promenjen dok"
+    """
 

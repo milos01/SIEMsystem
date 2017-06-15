@@ -1,8 +1,8 @@
 var Comment = require("../model/comment");
-var common = require('../events/eventsConf');
-require('../events/eventListeners');
+//var common = require('../eventsConf');
+//require('../events/eventListeners');
 
-var commonEmitter = common.commonEmitter;
+//var commonEmitter = common.commonEmitter;
 
 module.exports = function(app, express){
   var eventRouter = express.Router();

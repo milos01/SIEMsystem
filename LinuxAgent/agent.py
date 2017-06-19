@@ -10,6 +10,15 @@ import time
 import requests
 from requests.exceptions import ConnectionError
 
+import Crypto
+from Crypto.PublicKey import RSA
+from Crypto import Random
+from Crypto.Hash import SHA256
+import platform
+
+import pickle
+import json
+
 def readLogs(currTimeAuth,currTimeSYS):
     
     URL = "http://localhost:8080/sisa/primiga"   

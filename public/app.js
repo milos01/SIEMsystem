@@ -146,4 +146,20 @@ var checkNotLoggedin = function($q, $timeout, $http, $location, $rootScope, auth
     return deferred.promise;
   }
 
+app.filter('regex', function() {
+  return function(input, field, regex) {
+
+      var patt = new RegExp(regex);      
+      var out = [];
+      if(input){
+          for (var i = 0; i < input.length; i++){
+
+              if(patt.test(input[i][field]))
+                  out.push(input[i]);
+          }
+      }     
+    return out;
+  };
+});
+
 })(angular);

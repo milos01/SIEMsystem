@@ -1,4 +1,5 @@
 var Comment = require("../model/comment");
+var Event = require("../model/event");
 //var common = require('../eventsConf');
 //require('../events/eventListeners');
 
@@ -9,49 +10,26 @@ module.exports = function(app, express){
 
   eventRouter
   //Post new event
-  .post('/application/:aid/event', function(req, res, next) {
-    // var event = new Event(req.body);
-
-    //   Application.findOne({"_id": req.params.aid}, function(err, application) {
-    //     if (err) {
-    //       return next(err);
-    //     }
-        
-    //     var dns = req.body.dns;
-    //     if (dns==application.dns){
-    //       if(!isNaN(parseFloat(event.app_version))){
-    //         if(parseFloat(application.version) < parseFloat(event.app_version)){
-    //           application.version = event.app_version;
-    //         } 
-    //       }
-    //         application.events.push(event);
-    //         application.save(function(err, savedEvent){
-    //           if (err) {
-    //             return next(err);
-    //           }
-    //           commonEmitter.emit('sendMail', event, application.app_name);
-    //           res.json(savedEvent);
-    //         });
-    //     }
-    //     else{
-    //       var ob = {"fild":true};
-    //       res.json(ob);
-    //     }
-
+  .post('/event', function(req, res, next) {
+    var event = new Event(req.body);
+    // Event.find({}).limit(1).sort( { createdAt: -1 } ).exec(function(err, events, next) {
+    //     res.status(200).json(events);
     // });
+    event.save(function(err, savedEvent){
+      res.status(200).json(savedEvent);
+    });    
+   
   })
 
-  //Get event
-  .get('/application/:aid/event/:eventId', function(req, res, next) {
-    //   Application.findOne({"_id": req.params.aid}, function(err, application) {
-    //     if (err) {
-    //       return next(err);
-    //     }
-    //     var event = application.events.filter(function (event) {
-    //       return String(event._id) === req.params.eventId;
-    //     }).pop();
-    //     res.json(event);
-    // });
+  //Get all events
+  .get('/event', function(req, res, next) {
+      Event.find({}, function(err, events) {
+        if (err) {
+          return next(err);
+        }
+        
+        res.json(events);
+    });
   })
   //Get applicaiton events
   .get('/application/:aid/event', function(req, res, next) {

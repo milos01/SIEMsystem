@@ -12,75 +12,56 @@
                     <div class="ibox">
                         <div class="ibox-content" style="border: none">
                             <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                            <div class="col-md-12" style="margin-bottom: 30px">
+                                <div class="col-md-2"> <label>Windows <input type="checkbox" ng-click="vm.checkSystem('windows')"></label></div>
+                                <div class="col-md-2"><label>Linux <input type="checkbox" ng-click="vm.checkSystem('linux')"></label></div>
+                                <div class="col-md-2">
+                                <select class="form-control" style="width: 100%;margin-top: -10px" ng-model="selectedPc" ng-change="vm.checkPc(selectedPc)">
+                                    <option value="" selected="selected">All</option>
+                                    <option ng-repeat="eve in vm.events | unique:'data'">{{eve.data}}</option>
+                                </select>
+                                </div>
+                                <div class="col-md-3">
+                                <input  class="form-control" style="margin-top: -10px" name="regex" ng-model="vm.regex" placeholder="Search by regex or words">
+                                </div>
+                            </div>
+                      
                                 <thead>
                                 <tr>
                                     <th>Log ID</th>
-                                    <th>Native system</th>
-                                    <th>Log type </th>
+                                    <th>Native system(e_t)</th>
+                                    <th>Log type(d)</th>
                                     <th>Log messsage</th>
                                     <th>Time of creation</th>
 
                                 </tr>
                                 </thead>
                                 <tbody> 
-                                <tr>
+                                <tr ng-repeat="event in vm.events | filter:vm.systemFilter | filter:vm.pcFilter | regex:'event_type':vm.regex">
                                     <td style="padding-top: 15px">
-                                       1
+                                       {{$index}}
                                     </td>
                                     <td style="padding-top: 15px">
-                                        Windows(32)
+                                        {{event.event_type}}
                                     </td>
                                     <td style="padding-top: 15px">
-                                        System
+                                        {{event.data}}
                                     </td>
                                     <td style="padding-top: 15px">
                                         Throtle logins...(more than 10 times)
                                     </td>
                                     <td>
-                                    	02/02/2017
+                                    	{{event.createdAt}}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="padding-top: 15px">
-                                       2
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        Windows(64)
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        Application
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        Too many transaction from one account in shot time
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        12/10/2017
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top: 15px">
-                                       3
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        Linux(Ubuntu)
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        Application
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        Wrong pin on #0100011 ATM(more than 3 times)
-                                    </td>
-                                    <td style="padding-top: 15px">
-                                        05/10/2017
-                                    </td>
-                                </tr>
-                                <div ng-show="applications.length === 1" ng-cloak>
+                                <!-- <div ng-show="applications.length === 1" ng-cloak>
                                 	<b>{{applications.length}}</b> app found 
                                 </div>
                                 <div ng-show="applications.length != 1" ng-cloak>
                                 	<b>{{applications.length}}</b> Log count: 3
-                                </div>
-                         		<!-- <tr ng-show="applications.length === 0" ng-cloak>
+                                </div> -->
+                           
+                         		<!-- <tr ng-show="vm.events.length == 0" ng-cloak>
                          			No apps found...
                          		</tr> -->
                                 </tbody>
@@ -93,16 +74,7 @@
                                 </tfoot>
 
                             </table>
-                            <!-- <form action="/api/test" method="POST">
-                             asd{{csrfToken}}
-                              <input type="hidden" name="_csrf" value="{{csrfToken}}">
-  
-                              Favorite color: <input type="text" name="favoriteColor">
-                              <button type="submit">Submit</button>
-                            </form> -->
- 							<!-- <div ng-show="applications.length === 0" style="text-align: center" ng-cloak>
-                                No apps found...
-                            </div> -->
+                           
                         </div>
                     </div>
 

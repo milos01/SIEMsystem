@@ -7,29 +7,22 @@ var comment = require('./comment');
 var EventSchema = new Schema({
   event_type: {
     type: String,
-    required: true
   },
   app_version: {
     type: String
   },
   stack: {
     type: String,
-    required: true
   },
   data:{
     type: String,
-    required: true
   },
   fragment: {
     type: String,
-    required: true
   },
-  comments: [comment.schema],
 
   createdAt: Date,
   updatedAt: Date,
-  // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
-  // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
 });
 
 

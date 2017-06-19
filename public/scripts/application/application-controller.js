@@ -1,18 +1,57 @@
 (function () {
-	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, $uibModal, $log, toastr){
+	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, EventResource, $uibModal, $log, toastr){
 		var vm = this;
 
-		// meanData.getLoggedUser().then(function(user) {
-		//    	 ApplicationResource.getAllApps(user.data._id).then(function(items){
-		//    	 		$scope.applications = items;
-		//    	 });
-		//    	 ApplicationResource.getAllAssApps(user.data._id).then(function(items){
-		//    	 		$scope.assigned_applications = items;
-		//    	 });
-		// }, function (e) {
-		//       console.log(e);
-		// });
+		EventResource.getAllEvents().then(function(items){
+			vm.events = items;
+		});
 
+		vm.systemIncludes = [];
+		vm.pcIncludes = [];
+    
+	    vm.checkSystem = function(system) {
+	        var i = $.inArray(system, vm.systemIncludes);
+	        if (i > -1) {
+	            vm.systemIncludes.splice(i, 1);
+	        } else {
+	            vm.systemIncludes.push(system);
+	        }
+	    }
+
+	    vm.checkPc = function(pc) {
+	        var i = $.inArray(pc, vm.pcIncludes);
+	        if (i > -1) {
+
+	            vm.pcIncludes.splice(i, 1);
+	        } else {
+	        	vm.pcIncludes = [];
+	            vm.pcIncludes.push(pc);
+	        }
+	        // console.log(vm.pcIncludes);
+	    }
+    
+	    vm.systemFilter = function(event) {
+	        if (vm.systemIncludes.length > 0) {
+	            if ($.inArray(event.event_type, vm.systemIncludes) < 0)
+	                return;
+	        }
+	        
+	        return event;
+	    }
+
+	    vm.pcFilter = function(event) {
+	        if (vm.pcIncludes.length > 0) {
+	        	if($.inArray('', vm.pcIncludes) >= 0){
+	        		return event;
+	        	}
+	            if ($.inArray(event.data, vm.pcIncludes) < 0){
+	                return;
+	            }
+	        }
+	        
+	        return event;
+	    }
+		
 		vm.openReportModal = function() {
         	toastr.error('Log message', 'Log name');
         };

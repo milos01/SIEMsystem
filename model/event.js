@@ -1,33 +1,36 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var comment = require('./comment');
 // kreiramo novu shemu
 
 
 var EventSchema = new Schema({
-  event_type: {
-    type: String,
+
+  type: {
+    type: String
+
   },
-  app_version: {
+  system: {
     type: String
   },
-  stack: {
-    type: String,
+
+  computerName: {
+    type: String
   },
-  data:{
-    type: String,
+  message:{
+    type: String
   },
-  fragment: {
-    type: String,
+  signature: {
+    type: String
   },
 
-  createdAt: Date,
-  updatedAt: Date,
+  createdAt: Date
+  // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
+  // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
 });
 
 
 
-
+/*
 // prilikom snimanja se postavi datum
 EventSchema.pre('save', function(next) {
   // preuzmemo trenutni datum
@@ -42,7 +45,7 @@ EventSchema.pre('save', function(next) {
 
   // predjemo na sledecu funckiju u lancu
   next();
-});
+});*/
 
 // od sheme kreiramo model koji cemo koristiti
 var Event = mongoose.model('Event', EventSchema);

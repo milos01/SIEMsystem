@@ -1,0 +1,67 @@
+<div class="container">
+	<p><b>Logs report</b></p>
+    <form ng-submit="vm.getLogs()">
+    	<label>Logs time from</label>
+    	<input type="date" name="logFrom" ng-model="vm.logFrom">
+    	<label>to</label>
+    	<input type="date" name="logTo" ng-model="vm.logTo">
+    	<button type="submit">Generate</button>
+    </form>
+    </br>
+	<p><b>Alarms report</b></p>
+    <form ng-submit="vm.getAlarms()">
+    	<label>Alarm time from</label>
+    	<input type="date" name="alarmTime" ng-model="vm.alarmFrom">
+    	<label>to</label>
+    	<input type="date" name="alarmTime2" ng-model="vm.alarmTo">
+    	<button type="submit">Generate</button>
+    </form>
+    </br>
+	<table id="customers">
+	<caption><b>Report logs</b></caption>
+	  <tr>
+	    <th>System/Machine</th>
+	    <th>Log number</th>
+	  </tr>
+	  <tr>
+	    <td>Linux</td>
+	    <td ng-if="vm.lista.linux!==undefined">{{vm.lista.linux}}</td>
+	   	<td ng-if="vm.lista.linux===undefined">0</td>
+	  </tr>
+	  <tr style="border-bottom: 2px solid black">
+	    <td>Windows</td>
+	    <td ng-if="vm.lista.windows!==undefined">{{vm.lista.windows}}</td>
+	    <td ng-if="vm.lista.windows===undefined">0</td>
+	  </tr>
+	  <tr ng-repeat="m in vm.lista.machines">
+	  	<td>{{m._id}}</td>
+	    <td>{{m.total}}</td>
+	  </tr>
+	</table>
+
+
+	</br>
+	</br>
+	<table id="customers">
+	<caption><b>Report alarms</b></caption>
+	  <tr>
+	    <th>System/Machine</th>
+	    <th>Alarm number</th>
+	  </tr>
+	  <tr>
+	    <td>Linux</td>
+	    <td ng-if="vm.listaAlarm.linux!==undefined">{{vm.listaAlarm.linux}}</td>
+	   	<td ng-if="vm.listaAlarm.linux===undefined">0</td>
+	  </tr>
+	  <tr style="border-bottom: 2px solid black">
+	    <td>Windows</td>
+	    <td ng-if="vm.listaAlarm.windows!==undefined">{{vm.listaAlarm.windows}}</td>
+	    <td ng-if="vm.listaAlarm.windows===undefined">0</td>
+	  </tr>
+	  <tr ng-repeat="m in vm.listaAlarm.machines">
+	  	<td>{{m._id}}</td>
+	    <td>{{m.total}}</td>
+	  </tr>
+	</table>
+
+</div>

@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var morgan      = require('morgan');
 var passport = require('passport');
 var jwt = require('express-jwt');
+var crypto = require('crypto');
 
 var auth = jwt({
   secret: 'MY_SECRET',
@@ -20,8 +21,9 @@ var csrfProtection = csrf({ cookie: true });
 var homerouter = require('./server/homeRouter')(app, express);
 var userrouter = require('./server/userRouter')(app, express,passport, auth);
 var approuter = require('./server/appRouter')(app, express, csrfProtection, auth);
-var eventrouter = require('./server/eventRouter')(app, express);
+var eventrouter = require('./server/eventRouter')(app, express,crypto);
 var commentrouter = require('./server/commentRouter')(app, express);
+var alarmRouter = require('./server/alarmRouter')(app, express);
 require('./config/facebookPassport')(passport, mongoose);
 require('./config/localPassport')(passport, mongoose);
 // require('./config/googlePassport');
@@ -49,6 +51,7 @@ app.use('/api', approuter);
 app.use('/api', userrouter);
 app.use('/api', eventrouter);
 app.use('/api', commentrouter);
+app.use('/api', alarmRouter);
 
 app.use(function(err, req, res, next) {
   if (err.name === 'UnauthorizedError') {

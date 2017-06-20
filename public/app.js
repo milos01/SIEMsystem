@@ -89,6 +89,17 @@
         }
     })
 
+    .state('reports', {
+        parent: 'home',
+        views: {
+            'profileView@home': {
+                templateUrl: "/views/reports.html",
+                controller: "reportCtrl",
+                controllerAs: 'vm'
+            }
+        }
+    })
+
 
 })
   .run(function(Restangular, $log, authentication) {

@@ -23,6 +23,10 @@
                 <ul class="nav navbar-nav" ui-sref-active="current" ui-sref="alarmRules" ng-show="currentUser.role[0].role_name === 'admin'">
                     <li><a >Create alarm rules</a></li>
                 </ul>
+
+                <ul class="nav navbar-nav" ui-sref-active="current" ui-sref="reports">
+                    <li><a >Reports</a></li>
+                </ul>
                 <!-- Admin options -->
                 <ul class="nav navbar-nav pull-right" ui-sref-active="current" ng-click="vm.logout()">
                     <li><a>logout</a></li>

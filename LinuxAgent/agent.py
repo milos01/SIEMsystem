@@ -75,12 +75,12 @@ def readLogs(currTimeAuth,currTimeSYS):
                     hash_of_agent_message = SHA256.new(text).digest()
                     signature_agent       = keypair_agent.sign(hash_of_agent_message, '')
                     
-                    jsonData['Signature'] = signature_agent
+                    jsonData['Signature'] = "".join(map(str,signature_agent))
                   
                     print json.dumps(jsonData)
 
                     try:
-                        r = requests.post(URL, data=json.dumps(jsonData))
+                        r = requests.post(URL, data=json.dumps(jsonData),headers = {'Content-Type': 'application/json'})
                         print r.status_code
                     except ConnectionError as e:
                         print e
@@ -122,12 +122,12 @@ def readLogs(currTimeAuth,currTimeSYS):
                     hash_of_agent_message = SHA256.new(text).digest()
                     signature_agent       = keypair_agent.sign(hash_of_agent_message, '')
                     
-                    jsonData['Signature'] = signature_agent
+                    jsonData['Signature'] = "".join(map(str,signature_agent))
                   
                     print json.dumps(jsonData)
                     
                     try:
-                        r = requests.post(URL, data=json.dumps(jsonData))
+                        r = requests.post(URL, data=json.dumps(jsonData),headers = {'Content-Type': 'application/json'})
                     except ConnectionError as e:
                         print e
                         

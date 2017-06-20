@@ -3,6 +3,7 @@ var Event = require("../model/event");
 var fs = require('fs');
 var pickle = require('pickle');
 var nodersa = require('node-rsa');
+var sha256 = require('js-sha256').sha256;
 //var common = require('../eventsConf');
 //require('../events/eventListeners');
 
@@ -10,6 +11,14 @@ var nodersa = require('node-rsa');
 
 module.exports = function(app, express, crypto){
   var eventRouter = express.Router();
+
+  // Convert a hex string to a byte array
+  function hexToBytes(hex) {
+      for (var bytes = [], c = 0; c < hex.length; c += 2)
+      bytes.push(parseInt(hex.substr(c, 2), 16));
+      return bytes;
+  }
+
   function convertMonthNameToNumber(monthName) {
     var myDate = new Date(monthName + " 1, 2000");
     var monthDigit = myDate.getMonth();
@@ -19,6 +28,27 @@ module.exports = function(app, express, crypto){
   //Post new event
   .post('/event', function(req, res, next) {
 
+    var partOfDate = req.body.Date.split(" ");
+    var timePart = partOfDate[2].split(":");
+    var date = new Date(2017,convertMonthNameToNumber(partOfDate[0]),parseInt(partOfDate[1]),parseInt(timePart[0]),parseInt(timePart[1]),parseInt(timePart[2]),0);
+
+    var event = new Event();
+    event.type = req.body.Type;
+    event.system = req.body.System;
+    event.computerName = req.body.ComputerName;
+    event.message = req.body.Message;
+    event.signature = req.body.Signature;
+    event.createdAt = date;
+    // Event.find({"d":2}).limit(1).sort( { createdAt: -1 } ).exec(function(err, events, next) {
+    //     res.status(200).json(events);
+    // });
+    
+    
+
+    event.save(function(err, savedEvent){
+      res.status(200).json(savedEvent);
+    });    
+   
   })
 
   //Get all events

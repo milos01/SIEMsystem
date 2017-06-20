@@ -12,6 +12,13 @@
 			});
 		}
 
+		//api/alarm
+		retVal.getAllAlarms =  function(){
+			return Restangular.all('alarm').getList().then(function(response){
+				return response;
+			});
+		}
+
 		retVal.saveNewEvent = function(obj,ap){
 			var ev = {
 				"data":obj.data,

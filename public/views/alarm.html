@@ -1,0 +1,87 @@
+<div class="ibox float-e-margins">
+    <div class="ibox-title">
+        <h5>Applications </h5>
+        <button class="btn btn-info btn-xs pull-right" style="margin-top: -3px;" ng-click="vm.openReportModal()">System logs</button>        
+        <button class="btn btn-info btn-xs pull-right" style="margin-top: -3px; margin-right: 10px" ng-click="vm.openReportModal()">Application logs</button>        
+        <button class="btn btn-info btn-xs pull-right" style="margin-top: -3px; margin-right: 10px" ng-click="vm.openReportModal()">Firewall logs</button>        
+    </div>
+    <div class="ibox-content">
+         <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content" style="border: none">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                            <div class="col-md-12" style="margin-bottom: 30px">
+                                <div class="col-md-2"> <label>Windows <input type="checkbox" ng-click="vm.checkSystem('Windows')"></label></div>
+                                <div class="col-md-2"><label>Linux <input type="checkbox" ng-click="vm.checkSystem('Linux')"></label></div>
+                                <div class="col-md-2">
+                                <select class="form-control" style="width: 100%;margin-top: -10px" ng-model="selectedPc" ng-change="vm.checkPc(selectedPc)">
+                                    <option value="" selected="selected">All</option>
+                                    <option ng-repeat="eve in vm.alarms | unique:'computerName'">{{eve.computerName}}</option>
+                                </select>
+                                </div>
+                                <div class="col-md-3">
+                                <input  class="form-control" style="margin-top: -10px" name="regex" ng-model="vm.regex" placeholder="Search by regex or words">
+                                </div>
+                            </div>
+                      
+                                <thead>
+                                <tr>
+                                    <th>Log ID</th>
+                                    <th>Native system(e_t)</th>
+                                    <th>Computer name(e_t)</th>
+                                    <th>Log messsage</th>
+                                    <th>Time of creation</th>
+
+                                </tr>
+                                </thead>
+                                <tbody> 
+                                <tr ng-repeat="event in vm.alarms | filter:vm.systemFilter | filter:vm.pcFilter | regex:'message':vm.regex">
+                                    <td style="padding-top: 15px">
+                                       {{$index}}
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{event.system}}
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{event.computerName}}
+                                    </td>
+                                    <td style="padding-top: 15px">
+                                        {{event.message}}
+                                    </td>
+                                    <td>
+                                        {{event.createdAt}}
+                                    </td>
+                                </tr>
+                                <!-- <div ng-show="applications.length === 1" ng-cloak>
+                                    <b>{{applications.length}}</b> app found 
+                                </div>
+                                <div ng-show="applications.length != 1" ng-cloak>
+                                    <b>{{applications.length}}</b> Log count: 3
+                                </div> -->
+                           
+                                <!-- <tr ng-show="vm.events.length == 0" ng-cloak>
+                                    No apps found...
+                                </tr> -->
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+
+                            </table>
+                           
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

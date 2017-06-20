@@ -19,11 +19,16 @@ var AlarmSchema = new Schema({
   },
 
   createdAt: Date
-  // napomena! komentari su u ovom primeru implementirani kao reference zbog ilustracije rada sa referencama
-  // u realnom sluacju bolje bi bilo implementirati ih kao poddokumente
 });
 
+AlarmSchema.pre('save', function(next) {
+  var currentDate = new Date();
+  if (!this.createdAt)
+    this.createdAt = currentDate;
 
+  // predjemo na sledecu funckiju u lancu
+  next();
+});
 var Alarm = mongoose.model('Alarm', AlarmSchema);
 
 // publikujemo kreirani model

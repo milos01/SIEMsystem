@@ -77,12 +77,24 @@
     })
     .state('eventPage', {
         parent: 'home',
-        params : { appId: null, eventId: null },
         views: {
             'profileView@home': {
                 url: "applicationProf/:appId/event/:eventId",
                 templateUrl: "/views/event.html",
                 controller: "eventInfoCtrl",
+                controllerAs: 'vm'
+
+            }
+        }
+    })
+
+    .state('alarm', {
+        parent: 'home',
+        views: {
+            'profileView@home': {
+                url: "alarm",
+                templateUrl: "/views/alarm.html",
+                controller: "alarmCtrl",
                 controllerAs: 'vm'
 
             }

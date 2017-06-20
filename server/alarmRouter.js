@@ -4,8 +4,14 @@ module.exports = function(app, express){
   var alarmRouter = express.Router();
 
 
+  	alarmRouter.post('/alarm',function(req, res, next){
+  		var alarm = new Alarm(req.body);
 
-  
+  		alarm.save(function(err, savedAlarm){
+      		res.status(200).json(savedAlarm);
+    	});  
+  	});
+  	
 
 	alarmRouter.get('/atimeFrom/:timeFrom/atimeTo/:timeTo',function(req,res,next){
 	      var dateFrom = new Date(req.params.timeFrom);

@@ -1,55 +1,25 @@
 (function () {
-	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, EventResource, $uibModal, $log, toastr){
+	app.controller('applicaitonCtrl', function($scope, meanData, ApplicationResource, EventResource, $uibModal, $log, toastr, filters){
 		var vm = this;
 
 		EventResource.getAllEvents().then(function(items){
 			vm.events = items;
 		});
 
-		vm.systemIncludes = [];
-		vm.pcIncludes = [];
-    
-	    vm.checkSystem = function(system) {
-	        var i = $.inArray(system, vm.systemIncludes);
-	        if (i > -1) {
-	            vm.systemIncludes.splice(i, 1);
-	        } else {
-	            vm.systemIncludes.push(system);
-	        }
+		vm.checkSystem = function(system) {
+	        filters.checkSystem(system);
 	    }
 
 	    vm.checkPc = function(pc) {
-	        var i = $.inArray(pc, vm.pcIncludes);
-	        if (i > -1) {
-
-	            vm.pcIncludes.splice(i, 1);
-	        } else {
-	        	vm.pcIncludes = [];
-	            vm.pcIncludes.push(pc);
-	        }
-	        // console.log(vm.pcIncludes);
+	         filter.checkPc(pc);
 	    }
     
 	    vm.systemFilter = function(event) {
-	        if (vm.systemIncludes.length > 0) {
-	            if ($.inArray(event.event_type, vm.systemIncludes) < 0)
-	                return;
-	        }
-	        
-	        return event;
+	        return filters.systemFilter(event);
 	    }
 
 	    vm.pcFilter = function(event) {
-	        if (vm.pcIncludes.length > 0) {
-	        	if($.inArray('', vm.pcIncludes) >= 0){
-	        		return event;
-	        	}
-	            if ($.inArray(event.data, vm.pcIncludes) < 0){
-	                return;
-	            }
-	        }
-	        
-	        return event;
+	        return filters.pcFilter(event);
 	    }
 		
 		vm.openReportModal = function() {

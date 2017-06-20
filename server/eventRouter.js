@@ -1,7 +1,7 @@
 var Comment = require("../model/comment");
 var Event = require("../model/event");
+var Alarm = require("../model/alarm");
 var fs = require('fs');
-var pickle = require('pickle');
 var nodersa = require('node-rsa');
 var sha256 = require('js-sha256').sha256;
 //var common = require('../eventsConf');
@@ -59,6 +59,17 @@ module.exports = function(app, express, crypto){
         }
         
         res.json(events);
+    });
+  })
+
+  //Get all alarms
+  .get('/alarm', function(req, res, next) {
+      Alarm.find({}, function(err, alarms) {
+        if (err) {
+          return next(err);
+        }
+        
+        res.json(alarms);
     });
   })
 

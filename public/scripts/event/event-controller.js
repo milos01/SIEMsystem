@@ -10,9 +10,7 @@
 		// vm.fragmentNames = [];
 
 		EventResource.getEventsByIdApp(ida).then(function(res){
-			
 			$scope.eventList = res;
-	
 		});
 
 		ApplicationResource.getAppById(ida).then(function(res){
@@ -60,6 +58,31 @@
         	   }
         	});
         };
+	});
+
+	app.controller('alarmCtrl',function(EventResource, filters){
+		var vm = this;
+
+		EventResource.getAllAlarms().then(function(res){
+			vm.alarms = res;
+		});
+
+	    vm.checkSystem = function(system) {
+	        filters.checkSystem(system);
+	    }
+
+	    vm.checkPc = function(pc) {
+	         filter.checkPc(pc);
+	    }
+    
+	    vm.systemFilter = function(event) {
+	        return filters.systemFilter(event);
+	    }
+
+	    vm.pcFilter = function(event) {
+	        return filters.pcFilter(event);
+	    }
+		
 	});
 	
     app.controller('UserListModalCtrl',['ida','$uibModalInstance','ApplicationResource',function(ida,$uibModalInstance,ApplicationResource) {

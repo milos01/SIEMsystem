@@ -8,6 +8,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace WindowsServiceAgent
 {
@@ -16,6 +17,7 @@ namespace WindowsServiceAgent
         Thread securityThread;
         Thread systemThread;
         Thread applicationThread;
+        List<Thread> windowsThreads;
 
         public SiemAgent()
         {
@@ -24,18 +26,38 @@ namespace WindowsServiceAgent
 
         protected override void OnStart(string[] args)
         {
-            securityThread = new Thread(Library.readEventFile);
-            securityThread.Start("Setup.evtx");
+            RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(2048);
+            string publicKey = RSA.ToXmlString(false);
+            string privateKey = RSA.ToXmlString(true);
+            windowsThreads = new List<Thread>();
+            //List<LogFileInfo> logFiles = Library.readLastWrittenLogs(); 
+            List<string> logFiles = Library.readConfigFile();
+            foreach (string l in logFiles)
+            {
+                Library.writeLog(l, "log.txt");
+                ThreadStart starter = delegate { Library.readEventFile(l, privateKey); };
+                windowsThreads.Add(new Thread(starter));
+            }
+            foreach(Thread t in windowsThreads)
+            {
+                t.Start();
+            }
+            //securityThread = new Thread(Library.readEventFile);
+            //securityThread.Start("Setup.evtx");
             //systemThread = new Thread(Library.readEventFile);
             //systemThread.Start("System.evtx");
             //applicationThread = new Thread(Library.readEventFile);
             //applicationThread.Start("Application.evtx");
-            Library.writeLog("upalio se servissssssssssss", "LogFile.txt");
+            Library.writeLog("upalio se servisssssssssssseqweqweqwewqeqw", "LogFile.txt");
         }
         
         protected override void OnStop()
         {
-            securityThread.Abort();
+            foreach (Thread t in windowsThreads)
+            {
+                t.Abort();
+            }
+            //securityThread.Abort();
             //systemThread.Abort();
             //applicationThread.Abort();
             Library.writeLog("servis ugasennnnnnnnnnnnnnn", "LogFile.txt");

@@ -13,6 +13,7 @@ var auth = jwt({
   secret: 'MY_SECRET',
   userProperty: 'payload'
 });
+
 mongoose.connect('mongodb://localhost/siemcenter');
 
 var csrf = require('csurf');
@@ -21,8 +22,7 @@ var csrfProtection = csrf({ cookie: true });
 var homerouter = require('./server/homeRouter')(app, express);
 var userrouter = require('./server/userRouter')(app, express,passport, auth);
 var approuter = require('./server/appRouter')(app, express, csrfProtection, auth);
-var eventrouter = require('./server/eventRouter')(app, express,crypto);
-var commentrouter = require('./server/commentRouter')(app, express);
+var eventrouter = require('./server/eventRouter')(app, express,crypto, auth);
 var alarmRouter = require('./server/alarmRouter')(app, express);
 require('./config/facebookPassport')(passport, mongoose);
 require('./config/localPassport')(passport, mongoose);
@@ -50,7 +50,6 @@ app.use('/', homerouter);
 app.use('/api', approuter);
 app.use('/api', userrouter);
 app.use('/api', eventrouter);
-app.use('/api', commentrouter);
 app.use('/api', alarmRouter);
 
 app.use(function(err, req, res, next) {

@@ -17,12 +17,7 @@ module.exports = function(app, express, csrf, auth){
   var appRouter = express.Router();
 
   appRouter
-  //Get logged user
-  // !!! Insert this inside node_modules/express-jwt/lib/index.js !!!
-  // This is addition to auth middleware to check bot social and local sessions.
-  // if(req.isAuthenticated()){
-  //     return next();
-  //   }
+
   .post('/test', csrf, auth, permit('admin'), function(req, res){
     
     
@@ -74,76 +69,6 @@ module.exports = function(app, express, csrf, auth){
       res.json("boo");
     } 
   })
-  //Post new application for user
-  .post('/user/:id/application', function(req, res, next) {
-    var application = new Application(req.body);
-    User.findOne({"_id": req.params.id}, function(err, user) {
-      if (err) {
-        return next(err);
-      }
-      application.save(function(err, savedApp){
-        if(err){
-          return next(err);
-        }
-        User.findByIdAndUpdate(user._id, {$push:{"owner_applications": savedApp._id}}, function (err, user1) {
-        if(err){
-          return next(err);
-        }
-        Application.findByIdAndUpdate(savedApp._id, {$push:{"owner":user._id}}, function (err, user2) {
-          if(err){
-            return next(err);
-          }
-          res.json(savedApp);
-        });
-        });
-      }); 
-    });
-  })
-
-  //Get application by id
-  .get('/application/:id', function(req, res, next) {
-    if (!req.payload._id) {
-      res.status(401).json({
-        "message" : "UnauthorizedError: private profile"
-      });
-    } else {
-      Application.findOne({"_id": req.params.id}).populate('users').populate('owner').exec(function(err, application) {
-        if (err) {
-          return next(err);
-        }
-        res.json(application);
-        });
-    }
-  })
-
-  //Get all assigned users for some applicatiom 
-  .get('/application/:aid/users', function(req, res, next) {
-      Application.findOne({"_id": req.params.aid}, function(err, application) {
-        if (err) {
-          return next(err);
-        }
-        res.json(application.users);
-    });
-  })
-  //Delete application
-  .delete('/application/:id', function (req, res, next) {
-
-    Application.findOne({"_id": req.params.id}).exec(function(err, application) {
-      if (err) {
-          return next(err);
-      }
-      var app = application;
-
-      Application.findOneAndRemove({"_id":req.params.id},function (err, appl) {
-        if(err){
-          return next(err);
-        }
-        appl.remove();
-        // console.log(appl);
-      });
-      res.json(app);
-    });
-  });
 
   return appRouter;
 }

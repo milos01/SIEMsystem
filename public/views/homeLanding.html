@@ -13,12 +13,12 @@
                         <div class="ibox-content" style="border: none">
                             <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                             <div class="col-md-12" style="margin-bottom: 30px">
-                                <div class="col-md-2"> <label>Windows <input type="checkbox" ng-click="vm.checkSystem('windows')"></label></div>
-                                <div class="col-md-2"><label>Linux <input type="checkbox" ng-click="vm.checkSystem('linux')"></label></div>
+                                <div class="col-md-2"> <label>Windows <input type="checkbox" ng-click="vm.checkSystem('Windows')"></label></div>
+                                <div class="col-md-2"><label>Linux <input type="checkbox" ng-click="vm.checkSystem('Linux')"></label></div>
                                 <div class="col-md-2">
                                 <select class="form-control" style="width: 100%;margin-top: -10px" ng-model="selectedPc" ng-change="vm.checkPc(selectedPc)">
                                     <option value="" selected="selected">All</option>
-                                    <option ng-repeat="eve in vm.events | unique:'data'">{{eve.data}}</option>
+                                    <option ng-repeat="eve in vm.events | unique:'computerName'">{{eve.computerName}}</option>
                                 </select>
                                 </div>
                                 <div class="col-md-3">
@@ -29,26 +29,26 @@
                                 <thead>
                                 <tr>
                                     <th>Log ID</th>
-                                    <th>Native system(e_t)</th>
-                                    <th>Log type(d)</th>
-                                    <th>Log messsage</th>
+                                    <th>System</th>
+                                    <th>Computer name</th>
+                                    <th>Message</th>
                                     <th>Time of creation</th>
 
                                 </tr>
                                 </thead>
                                 <tbody> 
-                                <tr ng-repeat="event in vm.events | filter:vm.systemFilter | filter:vm.pcFilter | regex:'event_type':vm.regex">
+                                <tr ng-repeat="event in vm.events | filter:vm.systemFilter | filter:vm.pcFilter | regex:'message':vm.regex">
                                     <td style="padding-top: 15px">
                                        {{$index}}
                                     </td>
                                     <td style="padding-top: 15px">
-                                        {{event.event_type}}
+                                        {{event.system}}
                                     </td>
                                     <td style="padding-top: 15px">
-                                        {{event.data}}
+                                        {{event.computerName}}
                                     </td>
                                     <td style="padding-top: 15px">
-                                        Throtle logins...(more than 10 times)
+                                        {{event.message}}
                                     </td>
                                     <td>
                                     	{{event.createdAt}}

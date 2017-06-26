@@ -1,5 +1,6 @@
 var Comment = require("../model/comment");
 var Event = require("../model/event");
+var TimeSchedule = require("../model/timeSchedule");
 var Alarm = require("../model/alarm");
 var fs = require('fs');
 var nodersa = require('node-rsa');
@@ -39,14 +40,51 @@ module.exports = function(app, express, crypto, auth){
     event.message = req.body.Message;
     event.signature = req.body.Signature;
     event.createdAt = date;
-    // Event.find({"d":2}).limit(1).sort( { createdAt: -1 } ).exec(function(err, events, next) {
-    //     res.status(200).json(events);
-    // });
-    
-    
+    Event.find({'type': req.body.Type, 'computerName': req.body.ComputerName}).limit(1).sort( { createdAt: -1 } ).exec(function(err, eve, next) {
+      // if (eve.length) {
+        TimeSchedule.find({'errType': req.body.Type, 'logID': req.body.ComputerName}, function(err, ts){
+          if(!ts.length){
+            var nts = TimeSchedule();
+            nts.logID = req.body.ComputerName;
+            nts.n = 1;
+            nts.t = 0;
+            nts.errType = req.body.Type;
+            nts.eventTimes.push(date);
+
+
+            nts.save(function(err, savedTs){
+              if (err) {
+                 return next(err);
+              }
+              res.status(200).json(savedTs);
+            });
+          }
+
+          
+          if(ts.length > 0){
+            var currN = ts[0].n + 1;
+            ts[0].n += 1;
+            if(currN > 1){
+                var newEventDate = date;
+                var dbEventDate = eve[0].createdAt;
+                var diff = newEventDate.getTime() - dbEventDate.getTime();
+                ts[0].t += diff;
+                ts[0].eventTimes.push(date);
+
+            }
+            ts[0].save(function(err){
+              if (err) {
+                return next(err);
+              }
+              
+            });
+          }
+        });
+      // }
+    });
 
     event.save(function(err, savedEvent){
-      res.status(200).json(savedEvent);
+      // res.status(200).json(savedEvent);
     });    
    
   })

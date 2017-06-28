@@ -6,13 +6,26 @@ var Alarm = require("../model/alarm");
 var fs = require('fs');
 var nodersa = require('node-rsa');
 var sha256 = require('js-sha256').sha256;
+var crypto = require('crypto');
 //var common = require('../eventsConf');
 //require('../events/eventListeners');
 
 //var commonEmitter = common.commonEmitter;
 
 module.exports = function(app, express, crypto, auth, RuleEngine){
+
   var eventRouter = express.Router();
+
+  var replayAttackMap = {};
+
+  function addValueToKey(key, value) {
+    replayAttackMap[key] = replayAttackMap[key] || [];
+    replayAttackMap[key].push(value);
+  }
+
+  function isInArray(value, array) {
+    return array.indexOf(value) > -1;
+  }
 
   // Convert a hex string to a byte array
   function hexToBytes(hex) {
@@ -30,10 +43,60 @@ module.exports = function(app, express, crypto, auth, RuleEngine){
   //Post new event
   .post('/event', function(req, res, next) {
 
-    var partOfDate = req.body.Date.split(" ");
-    var timePart = partOfDate[2].split(":");
-    var date = new Date(2017,convertMonthNameToNumber(partOfDate[0]),parseInt(partOfDate[1]),parseInt(timePart[0]),parseInt(timePart[1]),parseInt(timePart[2]),0);
+    var messageToHash = req.body.Date+req.body.Type+req.body.Message+req.body.System+req.body.LogNumber;
 
+    // `signmsg` displayed by the above C# program
+    //var sig = 'dXLiJdc23Uc1tU/PPQmoFHh6ci6XTX/IvukdBHfsoEAOmgOioNrhXD33XPn00CCado78MnNJuKuDqrCN2l7EY+BMJEWWnpE5WnTMFKyhRs3aNHT4qrNwCJ+o07VhF0jS6Jv/ccjfjcwp1c0QKQ7bNjuEVjXg7vsyfbFJ3Fxt54PK3Gc2RuOH/Ur7Ebz9TN5hTiDj4j6gw3MlqNZc1u8bCaH93Xkm06JRMzdHNxoINGZuAy72SQnhRxmUGITKLHB3J7kz5vhI6f8pk9D8LNn9A99aLTyIi0FONbvtQlHmiM6+H4628uge6cQIlkKYPc6GYLPr+nEMOHvkRhHOlHJDIg=='
+    var sig = req.body.Signature;
+    var pubKey;
+    var agentName = req.body.ComputerName;
+    var logNumber = req.body.LogNumber;
+    fs.readFile('./WindowsAgent/publicKey.pem','utf8', function (err,pubKey) {
+      if (err) {
+        return console.log(err);
+      }
+      //console.log(pubKey);
+      var verify = crypto.createVerify('RSA-SHA256');
+      verify.update(messageToHash);
+      if(verify.verify(pubKey, new Buffer(sig, 'base64'))){
+
+        if(replayAttackMap[agentName] === undefined){
+          replayAttackMap[agentName] = [];
+        }
+        var exists = false;
+        if(replayAttackMap[agentName].indexOf(logNumber) > -1){
+          exists = true;
+          return res.json(200);
+        }
+        else{
+          replayAttackMap[agentName].push(logNumber);
+        }
+        if(logNumber === "8000"){
+          replayAttackMap[agentName] = [];
+        }
+        console.log(replayAttackMap);
+        var partOfDate;
+        var timePart;
+        var date;
+        if(req.body.System == "Windows"){
+        /*
+        partOfDate = req.body.Date.split(" ");
+        var datePart = partOfDate[0].split("/");
+        timePart = partOfDate[1].split(":");
+        var hours = parseInt(timePart[0]);
+        if(partOfDate[2] == "PM"){
+          hours += 12;
+        }
+        date = new Date(parseInt(datePart[2]),parseInt(datePart[0]), parseInt(datePart[1]), hours, parseInt(timePart[1]), parseInt(timePart[2]), 0);
+        */
+          date = new Date(req.body.Date);
+        }
+        else{
+          partOfDate = req.body.Date.split(" ");
+          timePart = partOfDate[2].split(":");
+          date = new Date(2017,convertMonthNameToNumber(partOfDate[0]),parseInt(partOfDate[1]),parseInt(timePart[0]),parseInt(timePart[1]),parseInt(timePart[2]),0);
+        }
+    
     var event = new Event();
     event.type = req.body.Type;
     event.system = req.body.System;
@@ -41,6 +104,7 @@ module.exports = function(app, express, crypto, auth, RuleEngine){
     event.message = req.body.Message;
     event.signature = req.body.Signature;
     event.createdAt = date;
+    /*
     Event.find({'type': req.body.Type, 'computerName': req.body.ComputerName}).limit(1).sort( { createdAt: -1 } ).exec(function(err, eve, next) {
       // if (eve.length) {
         TimeSchedule.find({'errType': req.body.Type, 'logID': req.body.ComputerName}, function(err, ts){
@@ -88,10 +152,42 @@ module.exports = function(app, express, crypto, auth, RuleEngine){
         });
       // }
     });
+    */
 
     event.save(function(err, savedEvent){
       res.status(200).json(savedEvent);
     });    
+      }
+      else{
+        var partOfDate;
+        var timePart;
+        var date;
+   
+        partOfDate = req.body.Date.split(" ");
+        timePart = partOfDate[2].split(":");
+        date = new Date(2017,1,1,1,1,1,0);
+    
+    
+
+        var event = new Event();
+        event.type = hash2;
+        event.system = decrypted;
+        event.computerName = encrypted;
+        event.message = messageToHash;
+        event.signature = req.body.Signature;
+        event.createdAt = date;
+        // Event.find({"d":2}).limit(1).sort( { createdAt: -1 } ).exec(function(err, events, next) {
+        //     res.status(200).json(events);
+        // });
+    
+    
+
+        event.save(function(err, savedEvent){
+          res.status(200).json(savedEvent);
+        });
+      }
+    });
+
 
   })
 

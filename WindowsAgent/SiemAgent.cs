@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto;
 
 namespace WindowsServiceAgent
 {
@@ -27,15 +28,16 @@ namespace WindowsServiceAgent
         protected override void OnStart(string[] args)
         {
             RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(2048);
-            string publicKey = RSA.ToXmlString(false);
-            string privateKey = RSA.ToXmlString(true);
+            //string publicKey = RSA.ToXmlString(false);
+            //string privateKey = RSA.ToXmlString(true);
+            AsymmetricCipherKeyPair keyPair = Library.readPrivateKey();
             windowsThreads = new List<Thread>();
             //List<LogFileInfo> logFiles = Library.readLastWrittenLogs(); 
             List<string> logFiles = Library.readConfigFile();
             foreach (string l in logFiles)
             {
                 Library.writeLog(l, "log.txt");
-                ThreadStart starter = delegate { Library.readEventFile(l, privateKey); };
+                ThreadStart starter = delegate { Library.readEventFile(l, keyPair, DateTime.Now); };
                 windowsThreads.Add(new Thread(starter));
             }
             foreach(Thread t in windowsThreads)

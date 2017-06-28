@@ -30,7 +30,7 @@
         	ApplicationResource.deleteApp(aid).then(function(item){
         		$scope.applications.splice($scope.applications.indexOf(item), 1);
         	});
-        }
+        };
 
 	});
 

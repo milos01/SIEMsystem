@@ -55,8 +55,9 @@
         parent: 'home',
         views: {
             'profileView@home': {
-                templateUrl: "/views/event.html",
-                controller: "someCtrl",
+                templateUrl: "/views/rules.html",
+                controller: "ruleCtrl",
+                controllerAs: 'vm',
                 resolve: {
                     adminPermit: adminPermit
                 }

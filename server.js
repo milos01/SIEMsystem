@@ -8,6 +8,7 @@ var morgan      = require('morgan');
 var passport = require('passport');
 var jwt = require('express-jwt');
 var crypto = require('crypto');
+var RuleEngine = require('node-rules');
 
 var auth = jwt({
   secret: 'MY_SECRET',
@@ -22,7 +23,7 @@ var csrfProtection = csrf({ cookie: true });
 var homerouter = require('./server/homeRouter')(app, express);
 var userrouter = require('./server/userRouter')(app, express,passport, auth);
 var approuter = require('./server/appRouter')(app, express, csrfProtection, auth);
-var eventrouter = require('./server/eventRouter')(app, express,crypto, auth);
+var eventrouter = require('./server/eventRouter')(app, express,crypto, auth, RuleEngine);
 var alarmRouter = require('./server/alarmRouter')(app, express);
 require('./config/facebookPassport')(passport, mongoose);
 require('./config/localPassport')(passport, mongoose);

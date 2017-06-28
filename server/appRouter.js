@@ -9,6 +9,8 @@ var Application = require("../model/application");
 var Event = require("../model/event");
 var Comment = require("../model/comment");
 var permit = require("../server/middleware/permission");
+var AlarmRules = require("../model/alarmRules");
+var Rule = require("../model/rule");
 
 var user = new User();
 //Check if token is valid
@@ -68,6 +70,39 @@ module.exports = function(app, express, csrf, auth){
     }else{
       res.json("boo");
     } 
+  })
+
+ .post("/rule", csrf, auth, permit('admin'), function(req, res, done) { 
+    r = new Rule();
+    r.n = req.body.n;
+    r.t = req.body.t;
+    r.save(function(err){
+      if (err) {
+        return done(err);
+      }
+    });
+
+    AlarmRules.find({"errType": req.body.type}).exec(function(err, rule, next) {
+      if (!rule.length) {
+        var ar = new AlarmRules();
+        ar.errType = req.body.type;
+        ar.rules.push(r);
+        ar.save(function(err , rl){
+          if (err) {
+            return done(err);
+          }
+        });
+      }else{
+        rule[0].rules.push(r);
+        rule[0].save(function(err , rl){
+          if (err) {
+            return done(err);
+          }
+        });
+      }
+
+    });
+    
   })
 
   return appRouter;
